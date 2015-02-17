@@ -1,6 +1,8 @@
 from django.conf.urls import patterns, include, url
-
+from predict_house_prices import views
 from django.contrib import admin
+from django.views.generic import TemplateView
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -9,4 +11,8 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^$', TemplateView.as_view(template_name='app.html')),
+    url(r'^loaddata/', views.load_data),
+    url(r'^returnhouses/', views.return_houses),
+    url(r'^returnhousebubbles/', views.return_house_bubbles)
 )
