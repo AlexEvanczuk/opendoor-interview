@@ -71,6 +71,7 @@ https://docs.google.com/document/d/1jlOj_QNyyZjTlFm3DH-LEcf6eMVyjidmvl1zILGqXN0/
 OpenDoor data science questions
 
 https://blog.dbrgn.ch/2013/6/18/heroku-buildpack-numpy-scipy-scikit-learn/
+https://github.com/thenovices/heroku-buildpack-scipy
 This requires changing the heroku buildpack to:
 heroku config:set BUILDPACK_URL=https://github.com/thenovices/heroku-buildpack-scipy
 
