@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'predict_house_prices',
+    'gunicorn'
 )
 
 MIDDLEWARE_CLASSES = (

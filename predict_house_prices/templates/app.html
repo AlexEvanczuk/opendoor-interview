@@ -1,11 +1,11 @@
 <head>
 	<title>House Pricing Infographic</title>
 	<!-- Loading Bootstrap -->
-	<link href="http://127.0.0.1:8000/static/Flat-UI-master/dist/css/vendor/bootstrap.min.css" rel="stylesheet">
+	<link href="https://fast-coast-5636.herokuapp.com/static/Flat-UI-master/dist/css/vendor/bootstrap.min.css" rel="stylesheet">
 	<!-- Loading Flat UI -->
-	<link href="http://127.0.0.1:8000/static/Flat-UI-master/dist/css/flat-ui.min.css" rel="stylesheet">
+	<link href="https://fast-coast-5636.herokuapp.com/static/Flat-UI-master/dist/css/flat-ui.min.css" rel="stylesheet">
 	<!-- Include Sidr bundled CSS theme -->
-	<link href="http://127.0.0.1:8000/static/javascripts/sidr/stylesheets/jquery.sidr.light.css" rel="stylesheet" >
+	<link href="https://fast-coast-5636.herokuapp.com/static/javascripts/sidr/stylesheets/jquery.sidr.light.css" rel="stylesheet" >
 
 	<!-- Some inline css -->
 	<style>
@@ -19,16 +19,16 @@
 
 <body>
 	<!-- Include jQuery -->
-	<script src="http://127.0.0.1:8000/static/javascripts/jquery.js"></script>
-	<script src="http://127.0.0.1:8000/static/javascripts/jquery-ui.min.js"></script>
+	<script src="https://fast-coast-5636.herokuapp.com/static/javascripts/jquery.js"></script>
+	<script src="https://fast-coast-5636.herokuapp.com/static/javascripts/jquery-ui.min.js"></script>
 	<!-- Include the Sidr JS -->
-	<script src="http://127.0.0.1:8000/static/javascripts/sidr/jquery.sidr.min.js"></script>
+	<script src="https://fast-coast-5636.herokuapp.com/static/javascripts/sidr/jquery.sidr.min.js"></script>
 	<!-- Include mapping engines -->
-	<script src="http://127.0.0.1:8000/static/javascripts/d3.min.js"></script>
-	<script src="http://127.0.0.1:8000/static/javascripts/topojson.js"></script>
-	<script src="http://127.0.0.1:8000/static/javascripts/datamaps.world.min.js"></script>
+	<script src="https://fast-coast-5636.herokuapp.com/static/javascripts/d3.min.js"></script>
+	<script src="https://fast-coast-5636.herokuapp.com/static/javascripts/topojson.js"></script>
+	<script src="https://fast-coast-5636.herokuapp.com/static/javascripts/datamaps.world.min.js"></script>
 	<!-- Include Select2 -->
-	<script src="http://127.0.0.1:8000/static/javascripts/select2.min.js"></script>
+	<script src="https://fast-coast-5636.herokuapp.com/static/javascripts/select2.min.js"></script>
 
 	<!-- Navbar -->
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -132,6 +132,8 @@
 				<p>Simple is good.</p>
 			</div>
 		</div>
+
+		<!-- To do: add technical notes and model errors (for example overfitting and no training data)
 	</div>
 	<!-- /About page -->
 
@@ -165,6 +167,16 @@
 				<p>Model parameters and model visualization go here</p>
 			</div>
 		</div>
+
+		<!-- Useful Visualizations and stats for models:
+			Average price difference
+			Distribution of price difference
+
+			Compare actual vs predicted price for each house (layered histograms)
+			Attribute comparison: For each attribute, x-axis contains range of attribute and Y contains average price difference.
+				This can help us understand underlying model properties, such as the distributions of underlying data as well
+				as the function that relates properties to price (linear, log, etc.)
+		-->
 	</div>
 	<!-- /Models page -->
 
@@ -287,7 +299,7 @@
 
 			// Load house bubble data
 			$.ajax({
-        		url: 'http://127.0.0.1:8000/returnhousebubbles',
+        		url: 'https://fast-coast-5636.herokuapp.com/returnhousebubbles',
        			success: function(response) {
 					houseBubbles = JSON.parse(response)
 					// Draw map for first time
@@ -331,7 +343,7 @@
 
     		// Load house data to provide ranges on prediction input
 			$.ajax({
-        		url: 'http://127.0.0.1:8000/returnhouses',
+        		url: 'https://fast-coast-5636.herokuapp.com/returnhouses',
        			success: function(response) {
 					houses = response
 					cities = []
