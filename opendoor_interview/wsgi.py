@@ -12,7 +12,5 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "opendoor_interview.settings")
 
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
-import sklearn
-#from dj_static import Cling
-
-#application = Cling(get_wsgi_application())
+from whitenoise.django import DjangoWhiteNoise
+application = DjangoWhiteNoise(application)
