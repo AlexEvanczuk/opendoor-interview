@@ -14,5 +14,6 @@ urlpatterns = patterns('',
     url(r'^$', TemplateView.as_view(template_name='app.html')),
     url(r'^loaddata/', views.load_data),
     url(r'^returnhouses/', views.return_houses),
-    url(r'^returnhousebubbles/', views.return_house_bubbles)
+    url(r'^returnhousebubbles/', views.return_house_bubbles),
+    url(r'^linearmodel/', views.linear_model)
 )

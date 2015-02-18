@@ -4,7 +4,10 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpRequest, QueryDi
 from predict_house_prices.models import House, City
 import requests, json, math
 from django.core import serializers
-from sklearn import datasets, linear_model
+from sklearn import linear_model
+import sklearn
+
+
 
 # Create your views here.
 def main_page(request):
@@ -48,4 +51,24 @@ def return_house_bubbles(request):
 		bubbles += [house_dict]
 	return HttpResponse(json.dumps(bubbles))
 
-#def linear_model(request):
+def linear_model(request):
+	# Create linear regression object
+	regr = linear_model.LinearRegression()
+
+	# Get houses and separate them into X and Y variables
+	houses = House.objects.all()
+	X_matrix = []
+	Y_matrix = []
+
+	for house in houses:
+		houseCovariates = [house.zip_code, house.state, house.house_type,
+			house.beds, house.baths, house.square_feet]
+		X_matrix += houseCovariates
+		Y_matrix += [house.actual_price]
+
+
+	# Train the model
+	regr.fit(X_matrix, Y_matrix)
+
+	# The coefficients
+	print('Coefficients: \n', regr.coef_)
