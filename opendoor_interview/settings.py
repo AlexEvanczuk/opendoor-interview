@@ -84,8 +84,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
-# Static file locations are hard-coded in to point to an Amazon S3 location
-STATIC_URL = '/static/'
+# Static file locations are hard-coded in to point to an Amazon S3 cloudfront location
+STATIC_URL = 'https://d1bfddpgq9qcut.cloudfront.net/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Simplified static file serving.
