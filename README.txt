@@ -70,3 +70,11 @@ Heroku - Hosting platform for webapps
 
 https://docs.google.com/document/d/1jlOj_QNyyZjTlFm3DH-LEcf6eMVyjidmvl1zILGqXN0/edit
 OpenDoor data science questions
+
+https://blog.dbrgn.ch/2013/6/18/heroku-buildpack-numpy-scipy-scikit-learn/
+This requires changing the heroku buildpack to:
+heroku config:set BUILDPACK_URL=https://github.com/thenovices/heroku-buildpack-scipy
+
+And changing the stack to cedar if it is not already
+heroku stack:set cedar
+Deploying scikit-learn on Heroku requires changing the Heroku buildpack
