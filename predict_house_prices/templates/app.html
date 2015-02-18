@@ -445,4 +445,42 @@
 	</script>
 	<!-- /Scripts -->
 
+	<!-- Technical notes page -->
+	<div class="container" style="height:500px;" id="viz">
+		<div class="demo-row" style="margin-top: 80px;">
+			<div class="demo-title">
+				<h3>Technical Notes and Improvements</h3>
+			</div>
+
+			<div class="demo-content demo-content-article">
+				<p><b>Database Information</b></p>
+				<p>In terms of database setup, future iterations should use a SQL database rather than the current sqlite for operational reasons</b>
+				<p><b>Dependencies (and related issues)</b></p>
+				<p>Here is a brief list of packages or resources used, with reflection on their utility.</b>
+				<p><a href="http://designmodo.github.io/Flat-UI/">FlatUI - Free User Interface Kit</a>: Relatively simple to use, and provides for a clean, simple, modern design.</p>
+				<p><a href="http://www.city-data.com/city/Rio-Linda-California.html">CityData - Information about different cities</a>: Semi-structured city data.</p>
+				<p><a href="http://datamaps.github.io/">DataMaps - Visual city data</a>: Extremely easy to use, perhaps not flexible enough for more advanced usage, but could possibly modify the source.</p>
+				<p><a href="http://scikit-learn.org/">Sci-Kit - Machine learning package for python</a>: Very unstable, would recommend any future projects insource machine learning algorithms (see below).</p>
+				<p><a href="https://devcenter.heroku.com/articles/getting-started-with-django">Heroku - Hosting for (Django) webapps</a>: Would not recommend for large-scale production environment.</p>
+				<p><a href="http://aws.amazon.com/s3/">Amazon S3 with Cloudfront - Static file serving</a>: Simple to use and to configure CORS</p>
+
+				<p><b>Machine Learning Backend Setup</b></p>
+				<p>Using existing machine learning resources is largely an exercise in frustration, particularly when combined with Heroku.
+					The first thing to note is that because of chained dependenceies and the fact that Heroku cannot properly sequentially
+					install requirements, a <a href="https://github.com/thenovices/heroku-buildpack-scipy">special buildpack</a> is required to 
+					deploy scikit-learn, along with the usage of particular versions of numpy, scipy, and scikit-learn, and a modification
+					to the configuration setup for Heroku (changing the stack, etc.).<p>
+				<p>Even when Heroku has been properly configured to run scikit-learn, or when running the app locally, 
+					scikit learn fails for reasons which are largely unclear and poorly documented.  To guarantee performance and
+					stability of a data science backend, it might be worth considering building from scratch, or diving deeper
+					into the package to ensure stability.
+					<p>
+				<p><b>General Technical Architecture (and caching)</b></p>
+				<p>The ideal setup would be to have a well-documented schema that is extremely flexible, on top of which sit a web-scraping application that pulls data from a number of sources and inputs it into models, as well as a machine learning application which runs all permutations and combinations of possible machine learning algorithms on top of the data on a regular interval. 
+					The machine learning application should cache model parameters, so future requests do not need to tediously rerun model fitting algorithms, which could become a resource hog if they are run everytime a client requests a page or a prediction.
+					My current setup does not cache anything, and will run the full stack (pulling from the database, transforming the data to be put into the models, and fitting hte model) every time a machine learning related request is made. 
+			</div>
+		</div>
+	</div>
+	<!-- /Technical Notes page --> 
 </body>
