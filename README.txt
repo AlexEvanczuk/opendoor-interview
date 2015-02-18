@@ -1,7 +1,6 @@
 README.txt
 
 Author: Alex Evanczuk
-Date: February 16, 2015
 Purpose: Predict price for CA houses
 
 Approach:
