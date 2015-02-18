@@ -39,13 +39,13 @@ def return_house_bubbles(request):
 			'fillKey': house.house_type,
 			# Use monotonic transformation to adjust price for radius
 			'radius': math.sqrt(house.actual_price) / 100,
+			'actual_price': house.actual_price,
 			'beds': house.beds, 'baths': house.baths,
 			'square_feet': house.square_feet,
 			'predicted_price': house.predicted_price,
 			'latitude': house.latitude,
 			'longitude': house.longitude}
 		bubbles += [house_dict]
-	print(bubbles)
 	return HttpResponse(json.dumps(bubbles))
 
 #def linear_model(request):

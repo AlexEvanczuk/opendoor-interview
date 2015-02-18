@@ -3,23 +3,35 @@
 	<!-- Loading Bootstrap -->
 	<link href="http://127.0.0.1:8000/static/Flat-UI-master/dist/css/vendor/bootstrap.min.css" rel="stylesheet">
 	<!-- Loading Flat UI -->
-	<link href="http://127.0.0.1:8000/static//Flat-UI-master/dist/css/flat-ui.min.css" rel="stylesheet">
+	<link href="http://127.0.0.1:8000/static/Flat-UI-master/dist/css/flat-ui.min.css" rel="stylesheet">
 	<!-- Include Sidr bundled CSS theme -->
-	<link rel="stylesheet" href="http://127.0.0.1:8000/static/javascripts/sidr/stylesheets/jquery.sidr.light.css">
+	<link href="http://127.0.0.1:8000/static/javascripts/sidr/stylesheets/jquery.sidr.light.css" rel="stylesheet" >
+
+	<!-- Some inline css -->
+	<style>
+		.selection-box {
+		    position:    absolute;
+		    background: transparent;
+		    border:     1px dotted #000;
+		  }
+	</style>
 </head>
 
 <body>
 	<!-- Include jQuery -->
 	<script src="http://127.0.0.1:8000/static/javascripts/jquery.js"></script>
+	<script src="http://127.0.0.1:8000/static/javascripts/jquery-ui.min.js"></script>
 	<!-- Include the Sidr JS -->
 	<script src="http://127.0.0.1:8000/static/javascripts/sidr/jquery.sidr.min.js"></script>
 	<!-- Include mapping engines -->
 	<script src="http://127.0.0.1:8000/static/javascripts/d3.min.js"></script>
 	<script src="http://127.0.0.1:8000/static/javascripts/topojson.js"></script>
 	<script src="http://127.0.0.1:8000/static/javascripts/datamaps.world.min.js"></script>
+	<!-- Include Select2 -->
+	<script src="http://127.0.0.1:8000/static/javascripts/select2.min.js"></script>
 
 	<!-- Navbar -->
-	<nav class="navbar navbar-default" role="navigation">
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-01">
 				<span class="sr-only">Toggle navigation</span>
@@ -33,14 +45,14 @@
 				<li><a href="#models">Models</a></li>
 				<li><a href="#viz">Visualization</a></li>
 				<li><a href="#predict">Prediction</a></li>
-				<li><a href="#sidr" id="simple-menu">Change Model</a></li>
-			</ul>
+<!-- 				<li><a href="#sidr" id="simple-menu">Change Model</a></li>
+ -->			</ul>
 		</div>
 	</nav>
 	<!-- /Navbar -->
 
 	<!-- Side menu --> 
-	<div id="sidr">
+<!-- 	<div id="sidr">
 		<ul>
 			<li class="active"><a href="#">Multiple Linear Regression</a></li>
 			<li><a href="#">Naive Bayes</a></li>
@@ -52,176 +64,386 @@
 			<li><label class="checkbox" for="checkbox3" style="padding-left:40px;">
 			<input type="checkbox" value="" id="checkbox3" data-toggle="checkbox" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>Supplementary City Data</label></li>
 		</ul>
-	</div>
+	</div> -->
 	<!-- /Side Menu -->
 
 	<!-- About page -->
 	<div class="container" id="about">
 	
-	<div class="demo-row">
-		<div class="demo-title">
-			<h3>What is this?</h3>
+		<div class="demo-row" style="margin-top: 120px;">
+			<div class="demo-title">
+				<h3>What is this?</h3>
+			</div>
+
+			<div class="demo-content demo-content-article">
+				<p>An easy to use interactive infographic to predict housing prices in the California area using a variety of statistical methods.  This is based on data provided by <a href="https://www.opendoor.com/">Opendoor</a> as well as supplementary data found on <a href="https://www.city-data.com/">City-data</a>.</p>
+			</div>
 		</div>
 
-		<div class="demo-content demo-content-article">
-			<p>An easy to use interactive infographic to predict housing prices in the California area using a variety of statistical methods.  This is based on data provided by <a href="https://www.opendoor.com/">Opendoor</a> as well as supplementary data found on <a href="https://www.city-data.com/">City-data</a>.</p>
+		<div class="demo-row">
+			<div class="demo-title">
+				<h3>Approach</h3>
+			</div>
+
+			<div class="demo-content demo-content-article">
+				<b>Initial Models</b>
+				<p>I use a variety of mathematical techniques to predict the house price.  I begin with straightforward multiple linear regression, using city, zip, state, and type as categorical variables, with beds, baths, and square feet as numerical variables.  I then check interaction effects, by seeing the effect that different house sizes have depending on location and type, by exploring the interactions of beds*city and beds*type.</p>
+				<p>Naive bayes and decision trees are employed as well to predict price.  Furthermore, I'm interested in the effect of geographical distribution independent of zip code, so I use k-means clustering on the coordinates of the houses to put them into de facto regions, which are then fed back into the original models.  I also give an option to use k-means clustering to categorize house types in three dimensions -- beds, baths, and square-feet. </p>
+				<b>Supplementary Data</b>
+				<p>Lastly, I am interested in supplementing my data with data in public repositories.  I step back and consider what information can be decomposed in a way that adds more than the sum of its parts, and I fgure that I can create a seperate Django model for city and add several covariates.  City-data.com offers a number of interesting covariates for each US city, and the ones I can include that seem at least marginally interesting are population, median income, population density, demographics, median household value, and distance to nearest city with population > 1,000,000.  Several other measures may seem interesting (or variations of measures such as standard deviation instead of mean), but to avoid overfitting I leave these out.  Of these, I select median income, population density, and median household value.  The code should allow for additional covariates to be added in a very maintanable way.  The additional covariates are researched and loaded in manually using Django's administration page.</p>
+				<b>Future Iterations</b>
+				<p>Future iterations could find a reliable API or page with a reliable structure and use web scraping techniques to pull additional information about cities to be put arbitrarily into a database, for procedural model generation.  For example, we might be interested in the location of a house to popular businesses, bars, restaurants, job listings, events, activities, etc.  A flexible web scraping framework would provide the infrastructure to create sophisticated housing pricing models.</p>
+				
+				In summary, the following model options are available:
+				<ul>
+					<li>Multiple Linear Regression</li>
+					<li>Multiple Linear Regression with interactions</li>
+					<li>Multiple Linear Regression with interactions and clustering</li>
+					<li>Multiple Linear Regression with interactions and city data</li>
+					<li>Naive Bayes</li>
+					<li>Naive Bayes with clustering</li>
+					<li>Naive Bayes with clustering and city data</li>
+					<li>Decision trees</li> 
+					<li>Decision trees with clustering</li>
+					<li>Decision trees with clustering and city data</li>
+				<ul>
+			</div>
 		</div>
-	</div>
 
-	<div class="demo-row">
-		<div class="demo-title">
-			<h3>Approach</h3>
+		<div class="demo-row">
+			<div class="demo-title">
+				<h3>Presentation</h3>
+			</div>
+
+			<div class="demo-content demo-content-article">
+				<p>This project is presented as a Django web app hosted on Heroku.  On the backend, I keep the default Django database, and create a model for each house with each field stored as a property with the respective data type.  These models are pulled into a Django view for the data analysis.  While it may be wise for larger data sets to store model results in server memory (or at least as a set of parameters for easy model recreation), in this case I recreate the model on every page load.  This ensures that the model always incorporates all data in the database.</p>
+				<p>The page is laid out with four views: about, models, visualization, and prediction.  The about page  outlines the purpose of the project.  The models page allows you to see the mathematical output of your model's parameters and visualize the model on graphs and charts.  The visualization page presents a map which uses D3 to display the results visually.  Every node is a house.  Nodes are placed based on longitude and latitude, sized according to (actual) price, darkened according to square feet, and colored according to type.  Each of these adjustments can be turned on or off.  Hover over nodes to display each property of a node, as well as its predicted price.</p>
+				<p>Lastly, I offer the ability to predict the price of a new house.  In the input new house box, you can input the values of each property of the house, and it will output the predicted price of that house, as well as place the new house on the map.  Note that for the sake of presentation, the node color will be greyscale.  Also note that the input fields only allow for domain selection for previously predicted categories, or continuous values within one standard deviation of the domain.</p>
+			</div>
 		</div>
 
-		<div class="demo-content demo-content-article">
-			<b>Initial Models</b>
-			<p>I use a variety of mathematical techniques to predict the house price.  I begin with straightforward multiple linear regression, using city, zip, state, and type as categorical variables, with beds, baths, and square feet as numerical variables.  I then check interaction effects, by seeing the effect that different house sizes have depending on location and type, by exploring the interactions of beds*city and beds*type.</p>
-			<p>Naive bayes and decision trees are employed as well to predict price.  Furthermore, I'm interested in the effect of geographical distribution independent of zip code, so I use k-means clustering on the coordinates of the houses to put them into de facto regions, which are then fed back into the original models.  I also give an option to use k-means clustering to categorize house types in three dimensions -- beds, baths, and square-feet. </p>
-			<b>Supplementary Data</b>
-			<p>Lastly, I am interested in supplementing my data with data in public repositories.  I step back and consider what information can be decomposed in a way that adds more than the sum of its parts, and I fgure that I can create a seperate Django model for city and add several covariates.  City-data.com offers a number of interesting covariates for each US city, and the ones I can include that seem at least marginally interesting are population, median income, population density, demographics, median household value, and distance to nearest city with population > 1,000,000.  Several other measures may seem interesting (or variations of measures such as standard deviation instead of mean), but to avoid overfitting I leave these out.  Of these, I select median income, population density, and median household value.  The code should allow for additional covariates to be added in a very maintanable way.  The additional covariates are researched and loaded in manually using Django's administration page.</p>
-			<b>Future Iterations</b>
-			<p>Future iterations could find a reliable API or page with a reliable structure and use web scraping techniques to pull additional information about cities to be put arbitrarily into a database, for procedural model generation.  For example, we might be interested in the location of a house to popular businesses, bars, restaurants, job listings, events, activities, etc.  A flexible web scraping framework would provide the infrastructure to create sophisticated housing pricing models.</p>
-			
-			In summary, the following model options are available:
-			<ul>
-				<li>Multiple Linear Regression</li>
-				<li>Multiple Linear Regression with interactions</li>
-				<li>Multiple Linear Regression with interactions and clustering</li>
-				<li>Multiple Linear Regression with interactions and city data</li>
-				<li>Naive Bayes</li>
-				<li>Naive Bayes with clustering</li>
-				<li>Naive Bayes with clustering and city data</li>
-				<li>Decision trees</li> 
-				<li>Decision trees with clustering</li>
-				<li>Decision trees with clustering and city data</li>
-			<ul>
+		<div class="demo-row">
+			<div class="demo-title">
+				<h3>Design</h3>
+			</div>
+
+			<div class="demo-content demo-content-article">
+				<p>I used the flat-ui user interface kit with user interactions designed manually to create this web-app.  I wanted the user experience to feel like a single interactive infographic where changed state data creates global change, rather than a "settings based" website (though the distinction is perhaps not clear).  Their is a clear division of functionality.  All visualizations and interactions post-model generations are displayed in the main page, and any changes to model creation are done in the sidebar.</p>
+				<p>Simple is good.</p>
+			</div>
 		</div>
-	</div>
-
-	<div class="demo-row">
-	<div class="demo-title">
-	<h3>Presentation</h3>
-	</div>
-
-	<div class="demo-content demo-content-article">
-		<p>This project is presented as a Django web app hosted on Heroku.  On the backend, I keep the default Django database, and create a model for each house with each field stored as a property with the respective data type.  These models are pulled into a Django view for the data analysis.  While it may be wise for larger data sets to store model results in server memory (or at least as a set of parameters for easy model recreation), in this case I recreate the model on every page load.  This ensures that the model always incorporates all data in the database.</p>
-		<p>The page is laid out with four views: about, models, visualization, and prediction.  The about page  outlines the purpose of the project.  The models page allows you to see the mathematical output of your model's parameters and visualize the model on graphs and charts.  The visualization page presents a map which uses D3 to display the results visually.  Every node is a house.  Nodes are placed based on longitude and latitude, sized according to (actual) price, darkened according to square feet, and colored according to type.  Each of these adjustments can be turned on or off.  Hover over nodes to display each property of a node, as well as its predicted price.</p>
-		<p>Lastly, I offer the ability to predict the price of a new house.  In the input new house box, you can input the values of each property of the house, and it will output the predicted price of that house, as well as place the new house on the map.  Note that for the sake of presentation, the node color will be greyscale.  Also note that the input fields only allow for domain selection for previously predicted categories, or continuous values within one standard deviation of the domain.</p>
-	</div>
-
-	<div class="demo-title">
-	<h3>Design</h3>
-	</div>
-
-	<div class="demo-content demo-content-article">
-	<p>
-	I used the flat-ui user interface kit with user interactions designed manually to create this web-app.  I wanted the user experience to feel like a single interactive infographic where changed state data creates global change, rather than a "settings based" website (though the distinction is perhaps not clear).  Their is a clear division of functionality.  All visualizations and interactions post-model generations are displayed in the main page, and any changes to model creation are done in the sidebar.
-	</p>
-	<p>
-	Simple is good.
-	</p>
-	</div>
 	</div>
 	<!-- /About page -->
 
 	<!-- Models page -->
 	<div class="container" id="models">
-	<div class="demo-row">
-	<div class="demo-title">
-	<h3>Models</h3>
-	</div>
+		<div class="demo-row">
+			<div class="demo-title">
+				<h3>Models</h3>
+			</div>
+			<p>Select Model</p>
+			<label class="radio" for="radio1">
+				<input type="radio" name="optionsRadios1" value="" id="radio1" data-toggle="radio" class="custom-radio" checked="checked"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
+				<b>Multiple Linear Regression</b>
+			</label>
+			<label class="radio" for="radio2">
+				<input type="radio" name="optionsRadios1" value="" id="radio2" data-toggle="radio" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
+				<b>Naive Bayes</b>
+			</label>
+			<label class="radio" for="radio3">
+				<input type="radio" name="optionsRadios1" value="" id="radio3" data-toggle="radio" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
+				<b>Decision Trees</b>
+			</label>
+			<label class="checkbox" for="checkbox1">
+			<input type="checkbox" value="" id="checkbox1" data-toggle="checkbox" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>Interactions (for MLR)</label></li>
+			<label class="checkbox" for="checkbox2">
+			<input type="checkbox" value="" id="checkbox2" data-toggle="checkbox" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>Clustering</label></li>
+			<label class="checkbox" for="checkbox3">
+			<input type="checkbox" value="" id="checkbox3" data-toggle="checkbox" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>Supplementary City Data</label></li>
 
-	<div class="demo-content demo-content-article">
-	<p>
-	Model parameters and model visualization go here
-	</p>
-	</div></div></div>
-	<!-- /.demo-row -->
+			<div class="demo-content demo-content-article">
+				<p>Model parameters and model visualization go here</p>
+			</div>
+		</div>
+	</div>
 	<!-- /Models page -->
 
 	<!-- Visualization page -->
 	<div class="container" style="height:500px;" id="viz">
-	<div class="demo-row">
-	<div class="demo-title">
-	<h3>Visualization</h3>
+		<div class="demo-row">
+			<div class="demo-title">
+				<h3>Visualization</h3>
+			</div>
+
+			<div class="demo-content demo-content-article">
+			</div>
+			<div class="container" id="vizData">
+				Hover over bubbles to find detailed house information.  Click on a node to recenter map.
+			</div>
+		</div>
+		<button class="btn btn-embossed btn-primary" style="position:absolute; margin-top: 10px; margin-left: 10px;" id="zoomin">Zoom in</button>
+		<button class="btn btn-embossed" style="position:absolute; margin-top: 60px; margin-left: 10px;" id="zoomout">Zoom out</button>
+		<div style="pointer-events: none; position:absolute; margin-top: 110px; margin-left: 10px;" id="mapData">
+		</div>
 	</div>
 
-	<div class="demo-content demo-content-article">
-	<script>
-	var map = new Datamap({
-	element: document.getElementById('viz'),
-	geographyConfig: {
-	popupOnHover: false,
-	highlightOnHover: false
-	},
-	// Zoom in on CA
-	setProjection: function(element) {
-	var projection = d3.geo.equirectangular()
-	.center([-90, 37])
-	.rotate([4.4, 0])
-	.scale(1000)
-	.translate([element.offsetWidth / 2, element.offsetHeight / 2]);
-	var path = d3.geo.path()
-	.projection(projection);
-
-	return {path: path, projection: projection};
-	},
-	});
-
-	map.bubbles([
-	{
-	name: 'Castle Bravo',
-	radius: 25,
-	yeild: 15000,
-	country: 'USA',
-	significance: 'First dry fusion fuel "staged" thermonuclear weapon; a serious nuclear fallout accident occurred',
-	fillKey: 'USA',
-	date: '1954-03-01',
-	latitude: 11.415,
-	longitude: 165.1619
-	},{
-	name: 'Tsar Bomba',
-	radius: 70,
-	yeild: 50000,
-	country: 'USSR',
-	fillKey: 'RUS',
-	significance: 'Largest thermonuclear weapon ever tested—scaled down from its initial 100 Mt design by 50%',
-	date: '1961-10-31',
-	latitude: 73.482,
-	longitude: 54.5854
-	}
-	], {
-	popupTemplate: function(geo, data) {
-	return '<div class="hoverinfo">Yield:' + data.yeild + '
-	Exploded on ' + data.date + ' by the'  + data.country + ''
-	}
-	});
-	</script>
-	</div></div></div>
-	<!-- /.demo-row -->
 	<!-- /Visualization page -->
 
 	<!-- Prediction page -->
-	<div class="container" id="predict">
-	<div class="demo-row">
-	<div class="demo-title">
-	<h3>Prediction</h3>
-	</div>
+	<div class="container" style="padding-top: 150px;" id="predict">
+		<div class="demo-row">
+			<div class="demo-title">
+				<h3>Prediction</h3>
+			</div>
+ 
+			<div class="demo-content demo-content-article" style="display:inline; width=100%;">
+				<p>Input house fields here to predict their price!<br>Note that we only allow previously trained categorical data to be inputted.<br>Click on a field to see a valid data range.</p>
+				<div>
+					<div style="float:left">
+						<input type="text" placeholder="Street" class="form-control" style="width:300px; margin-bottom: 10px;"/>
+						<input type="text" placeholder="City" class="form-control" style="width:300px; margin-bottom: 10px;"/>
+						<input type="text" placeholder="Zip Code" class="form-control" style="width:300px; margin-bottom: 10px;"/>
+						<input type="text" placeholder="State" class="form-control" style="width:300px; margin-bottom: 10px;"/>
+						<input type="text" placeholder="Beds" class="form-control" style="width:300px; margin-bottom: 10px;"/>
+						<input type="text" placeholder="Baths" class="form-control" style="width:300px; margin-bottom: 10px;"/>
+						<input type="text" placeholder="Square Feet" class="form-control" style="width:300px; margin-bottom: 10px;"/>
+						<input type="text" placeholder="House Type" class="form-control" style="width:300px; margin-bottom: 10px;"/>
+						<input type="text" placeholder="Sale Date" class="form-control" style="width:300px; margin-bottom: 10px;"/>
+						<input type="text" placeholder="Latitude" class="form-control" style="width:300px; margin-bottom: 10px;"/>
+						<input type="text" placeholder="Longitude" class="form-control" style="width:300px; margin-bottom: 10px;"/>
+					</div>
+					<div style="float:left; padding-left: 15px; width: 800px; word-wrap: break-word;" id="validData">
 
-	<div class="demo-content demo-content-article">
-	<p>
-	Input boxes for house prediction goes here
-	</p>
-	</div></div></div>
-	<!-- /.demo-row -->
-	<!-- /Prediction Page page -->
+						<script>
+							// Here we create the click events for each of our fields to list the valid data range
+							$("[placeholder]").click(function() {
+									switch($(this).attr('placeholder')){
+										case 'Street':
+											$("#validData").html("Any string will do")
+											break;
+										case 'City':
+											$("#validData").html("Type any of the following (case-sensitive):<br><p style='overflow-y: auto; overflow-x: auto;'> " + uniqueCities + "</p>")
+											break;
+										case 'Zip Code':
+											$("#validData").html("Type any of the following (case-sensitive):<br><p style='overflow-y: auto; overflow-x: auto;'> " + uniqueZipCodes + "</p>")
+											break;
+										case 'State': 
+											$("#validData").html("Type any of the following (case-sensitive):<br><p style='overflow-y: auto; overflow-x: auto;'> " + uniqueStates + "</p>")
+											break;
+										case 'Beds':
+											$("#validData").html("Numerical low ranges are calculated by taking the maximum of zero or one standard deviation below the lowest value in our data set and rounding.<br>" +
+												"Numerical high ranges are calculated by adding one standard deviation to the maximum value in our data set and rounding.<br>" +
+												"Please enter a number between " + bedRange[0] + " and " + bedRange[1] + ".")
+											break;
+										case 'Baths':
+											$("#validData").html("Numerical low ranges are calculated by taking the maximum of zero or one standard deviation below the lowest value in our data set and rounding.<br>" +
+												"Numerical high ranges are calculated by adding one standard deviation to the maximum value in our data set and rounding.<br>" +
+												"Please enter a number between " + bathsRange[0] + " and " + bathsRange[1] + ".")
+											break;
+										case 'Square Feet':
+											$("#validData").html("Numerical low ranges are calculated by taking the maximum of zero or one standard deviation below the lowest value in our data set and rounding.<br>" +
+												"Numerical high ranges are calculated by adding one standard deviation to the maximum value in our data set and rounding.<br>" +
+												"Please enter a number between " + squareFeet[0] + " and " + squareFeet[1] + ".")
+											break;
+										case 'House Type':
+											$("#validData").html("Type any of the following (case-sensitive):<br><p style='overflow-y: auto; overflow-x: auto;'> " + uniqueHouseTypes + "</p>")
+											break;
+										case 'Sale Date':
+											$("#validData").html("Any string will do")
+											break;
+										case 'Latitude':
+											$("#validData").html("Any decimal number between -90.0 and 90.0")
+											break;
+										case 'Longitude':
+											$("#validData").html("Any decimal number between -180.0 and 180.0")
+											break;
+										default:
+											// Do nothing											
+									}
+							});
+						</script>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="container">
+		<blockquote>
+			Using data trained with a Naive Bayes classifier, we predict this house will sell for 112312.  Scroll up to see this house outputted in the map (in black).
+		</blockquote>
+	</div>
+	<!-- /Prediction page -->
 
 	<!-- Scripts -->
 	<script>
-	$(document).ready(function() {
-	$('#simple-menu').sidr(); 
-	// Load house bubbles from server
-	});
+		$(document).ready(function() {
+			// $('#simple-menu').sidr();
+
+			// Initial map parameters
+			scale = 1000
+			longitude = -115.478851
+			latitude = 38.575764
+
+			// Load house bubble data
+			$.ajax({
+        		url: 'http://127.0.0.1:8000/returnhousebubbles',
+       			success: function(response) {
+					houseBubbles = JSON.parse(response)
+					// Draw map for first time
+					reDrawMap()
+        		}
+    		});
+
+    		// Some basic math functions for returning a valid range
+    		function standardDeviation(values){
+  				var avg = average(values);
+  
+  				var squareDiffs = values.map(function(value){
+					var diff = value - avg;
+					var sqrDiff = diff * diff;
+    				return sqrDiff;
+ 				});
+  
+				var avgSquareDiff = average(squareDiffs);
+ 
+				var stdDev = Math.sqrt(avgSquareDiff);
+				return stdDev;
+			}
+ 
+			function average(data){
+				var sum = data.reduce(function(sum, value){
+					return sum + value;
+				}, 0);
+ 
+				var avg = sum / data.length;
+				return avg;
+			}
+
+			function returnRange(arr){
+				var min = Math.min.apply(null, arr)
+				var max = Math.max.apply(null, arr)
+				var stdDev = standardDeviation(arr)
+				var lowRange = Math.max(0, Math.ceil(min - stdDev))
+				var highRange = Math.ceil(max + stdDev)
+				return [lowRange, highRange]
+			}
+
+    		// Load house data to provide ranges on prediction input
+			$.ajax({
+        		url: 'http://127.0.0.1:8000/returnhouses',
+       			success: function(response) {
+					houses = response
+					cities = []
+					zipCodes = []
+					states = []
+					beds = []
+					baths = []
+					squareFeet = []
+					houseType = []
+
+					$(houses).each(function(){ 
+						cities.push($(this).attr('fields').city) 
+						zipCodes.push($(this).attr('fields').zip_code) 
+						states.push($(this).attr('fields').state) 
+						beds.push($(this).attr('fields').beds) 
+						baths.push($(this).attr('fields').baths) 
+						squareFeet.push($(this).attr('fields').square_feet) 
+						houseType.push($(this).attr('fields').house_type) 
+					});
+					
+					uniqueCities = $.unique(cities).sort().join([separator = ', '])
+					uniqueZipCodes = $.unique(zipCodes).sort().join([separator = ', '])
+					uniqueStates = $.unique(states).sort().join([separator = ', '])
+					uniqueHouseTypes = $.unique(houseType).sort().join([separator = ', '])
+
+					bedRange = returnRange(beds)
+					bathsRange = returnRange(baths)
+					squareFeetRange = returnRange(squareFeet)
+        		}
+    		});
+
+    		// Pull in model parameters for each of our models
+
+  			// Load map and associated functions
+  			function get_data(zip_code, beds, baths, square_feet, house_type, actual_price, predicted_price) {
+	    		return "this is a test"
+			}
+
+			function reDrawMap(){
+				$('.datamap').remove()
+				var map = new Datamap({
+					element: document.getElementById('viz'),
+					geographyConfig: {
+						popupOnHover: true,
+						highlightOnHover: false
+					},
+					bubblesConfig: {
+						popupOnHover: true
+					},
+					fills: {
+						'defaultFill': '#ABDDA4',
+						'Condo': '#1abc9c',
+						'Multi-Family': '#1abc9c',
+						'Residential': '#3498db',
+						'Unkown': '#e74c3c'
+					},
+						
+					// Zoom in on Sacramento, CA
+					setProjection: function(element) {
+						var projection = d3.geo.equirectangular()
+							.center([longitude, latitude])
+							//.rotate([4.4, 0])
+							.scale(scale)
+							.translate([element.offsetWidth / 2, element.offsetHeight / 2]);
+						var path = d3.geo.path()
+							.projection(projection);
+						return {path: path, projection: projection};
+					},
+				});
+
+				// Populate map with bubbles
+				map.bubbles(houseBubbles, {
+					popupTemplate: function(geo, data) {
+						$("#mapData").html("<b>Lat, long:</b> " + 
+							latitude + ", " + longitude + "<br><b>Beds:</b> " +
+							data.beds + "<br><b>Baths:</b> " + data.baths + "<br><b>House Type:</b> " + 
+							data.fillKey + "<br><b>Square Feet:</b> " + data.square_feet + "<br><b>Zip:</b> " + 
+							data.zip_code + "<br><b>Actual Price:</b> " + data.actual_price + "<br><b>Predicted Price:</b> " + 
+							data.predicted_price)
+						return null
+					}
+				});
+
+				// Add bubble click and hover functionality
+				$(".datamaps-bubble").click(function() {
+					data = JSON.parse($(this).attr('data-info'))
+					latitude = data.latitude
+					longitude = data.longitude
+					reDrawMap()
+				});
+			}
+
+			// Boiler plate function for changing circle radii
+			function adjustBubbleRadius(alpha){
+				for(bubble in houseBubbles){
+					houseBubbles[bubble]['radius'] *= scale * alpha
+				}
+			}
+
+			// Add button zoom handlers
+    		$("#zoomin").click(function() {
+    			// Adjust the bubble size proportional to zoom level
+    			scale *= 2 
+				reDrawMap()
+			});
+
+    		$("#zoomout").click(function() {
+    			scale /= 2
+				reDrawMap()
+			});
+		});
 	</script>
 	<!-- /Scripts -->
+
 </body>
