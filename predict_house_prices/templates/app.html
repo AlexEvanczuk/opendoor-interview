@@ -1,5 +1,6 @@
 <head>
 	<title>House Pricing Infographic</title>
+	<link href="http://www.favicon.cc/logo3d/281717.png" rel="shortcut icon" type="image/png">
 	<!-- Loading Bootstrap -->
 	<link href="https://d1bfddpgq9qcut.cloudfront.net/static/Flat-UI-master/dist/css/vendor/bootstrap.min.css" rel="stylesheet">
 	<!-- Loading Flat UI -->
@@ -12,8 +13,8 @@
 	<!-- Include jQuery -->
 	<script src="https://d1bfddpgq9qcut.cloudfront.net/static/javascripts/jquery.js"></script>
 	<script src="https://d1bfddpgq9qcut.cloudfront.net/static/javascripts/jquery-ui.min.js"></script>
-	<!-- Include the Sidr JS -->
-	<script src="https://d1bfddpgq9qcut.cloudfront.net/static/javascripts/sidr/jquery.sidr.min.js"></script>
+	<!-- Include jQuery nav plugin -->
+	<script src="https://d1bfddpgq9qcut.cloudfront.net/static/javascripts/jquery.singlePageNav.js"></script>
 	<!-- Include mapping engines -->
 	<script src="https://d1bfddpgq9qcut.cloudfront.net/static/javascripts/d3.min.js"></script>
 	<script src="https://d1bfddpgq9qcut.cloudfront.net/static/javascripts/topojson.js"></script>
@@ -29,10 +30,11 @@
 		
 		<div class="collapse navbar-collapse" id="navbar-collapse-01">
 			<ul class="nav navbar-nav">
-				<li class="active"><a href="#about">About</a></li>
+				<li><a href="#about">About</a></li>
 				<li><a href="#models">Models</a></li>
 				<li><a href="#viz">Visualization</a></li>
 				<li><a href="#predict">Prediction</a></li>
+				<li><a href="#technical">Technical</a></li>
 			</ul>
 			<div align="right">
 				<div class="loader" title="4">
@@ -63,6 +65,7 @@
 
 			<div class="demo-content demo-content-article">
 				<p>An easy to use interactive infographic to predict housing prices in the California area using a variety of statistical methods.  This is based on data provided by <a href="https://www.opendoor.com/">Opendoor</a> as well as supplementary data found on <a href="https://www.city-data.com/">City-data</a>.</p>
+				<p>If you like this, feel free to <a href="https://github.com/AlexEvanczuk/opendoor-interview">fork me on github</a> and make any contributions there or to contact me about the project.</p>
 			</div>
 		</div>
 
@@ -326,6 +329,8 @@
 	<!-- Scripts -->
 	<script>
 		$(document).ready(function() {
+			$('#navbar-collapse-01').singlePageNav({'easing':'easeOutQuint'});
+
 			// Set a loading icon while any data is being loaded for a better user experience
 			$(document).bind("ajaxSend", function(){
   				$(".loader").show()
@@ -333,9 +338,10 @@
   				$(".loader").hide()
  			});
 			// Set origin URL (to switch from local to production environments)
-			origin = 'http://opendoor-interview.herokuapp.com/'
+			//origin = 'http://opendoor-interview.herokuapp.com/'
 			//origin = 'http://127.0.0.1:8000'
-			//origin = 'http://0.0.0.0:5000'
+			origin = 'http://0.0.0.0:5000'
+			
 			// Initial map parameters
 			scale = 500
 			longitude = -115.478851
@@ -619,7 +625,7 @@
 	<!-- /Scripts -->
 
 	<!-- Technical notes page -->
-	<div class="container" style="height:500px;" id="viz">
+	<div class="container" style="height:500px;" id="technical">
 		<div class="demo-row" style="margin-top: 80px;">
 			<div class="demo-title">
 				<h3>Technical Notes and Improvements</h3>
