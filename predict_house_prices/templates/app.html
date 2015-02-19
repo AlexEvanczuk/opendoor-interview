@@ -34,6 +34,21 @@
 				<li><a href="#viz">Visualization</a></li>
 				<li><a href="#predict">Prediction</a></li>
 			</ul>
+			<div align="right">
+				<div class="loader" title="4">
+					<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24px" height="30px" viewBox="0 0 24 30" style="enable-background:new 0 0 50 50; margin: 10px 10px 10px 10px;" xml:space="preserve">
+						<rect x="0" y="0" width="4" height="10" fill="#1ABC9C">
+							<animateTransform attributeType="xml" attributeName="transform" type="translate" values="0 0; 0 20; 0 0" begin="0" dur="0.6s" repeatCount="indefinite" />
+   						</rect>
+    					<rect x="10" y="0" width="4" height="10" fill="#1ABC9C">
+							<animateTransform attributeType="xml" attributeName="transform" type="translate" values="0 0; 0 20; 0 0" begin="0.2s" dur="0.6s" repeatCount="indefinite" />
+						</rect>
+    					<rect x="20" y="0" width="4" height="10" fill="#1ABC9C">
+							<animateTransform attributeType="xml" attributeName="transform" type="translate" values="0 0; 0 20; 0 0" begin="0.4s" dur="0.6s" repeatCount="indefinite" />
+						</rect>
+					</svg>
+				</div>
+			</div>
 		</div>
 	</nav>
 	<!-- /Navbar -->
@@ -311,10 +326,16 @@
 	<!-- Scripts -->
 	<script>
 		$(document).ready(function() {
+			// Set a loading icon while any data is being loaded for a better user experience
+			$(document).bind("ajaxSend", function(){
+  				$(".loader").show()
+ 			}).bind("ajaxComplete", function(){
+  				$(".loader").hide()
+ 			});
 			// Set origin URL (to switch from local to production environments)
-			origin = 'http://opendoor-interview.herokuapp.com/'
+			//origin = 'http://opendoor-interview.herokuapp.com/'
 			//origin = 'http://127.0.0.1:8000'
-
+			origin = 'http://0.0.0.0:5000'
 			// Initial map parameters
 			scale = 500
 			longitude = -115.478851

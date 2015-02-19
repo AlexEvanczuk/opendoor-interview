@@ -105,6 +105,6 @@ STATICFILES_DIRS = (
 # Additional settings notes:
 # Note that the heroku build pack requires the following installations 
 # of numpy, scipy, and scikit-learn
-# numpy==1.9.0
-# scikit-learn==0.14.1
-# scipy==0.13.3
+#numpy==1.8.1
+#scikit-learn==0.14.1
+#scipy==0.14.0 
