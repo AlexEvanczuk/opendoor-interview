@@ -7,6 +7,35 @@
 	<link href="https://d1bfddpgq9qcut.cloudfront.net/static/Flat-UI-master/dist/css/flat-ui.min.css" rel="stylesheet">
 	<!-- Include Sidr bundled CSS theme -->
 	<link href="https://d1bfddpgq9qcut.cloudfront.net/static/javascripts/sidr/stylesheets/jquery.sidr.light.css" rel="stylesheet" >
+
+			
+	<!-- Style for Histogram of actual vs predicted price distributions -->
+	<style>
+		.actualBar rect {
+		  fill: #1abc9c;
+		  opacity: 0.4;
+		  shape-rendering: crispEdges;
+		}
+
+		.predictedBar rect {
+		  fill: #3498db;
+		  opacity: 0.4;
+		  shape-rendering: crispEdges;
+		}
+
+		.bar text {
+		  fill: #34495e;
+		}
+
+		.axis path, .axis line {
+		  fill: none;
+		  stroke: #34495e;
+		  shape-rendering: crispEdges;
+		}
+
+		/* Add a sweet little fade to our map */
+
+	</style>
 </head>
 
 <body>
@@ -75,27 +104,15 @@
 			</div>
 
 			<div class="demo-content demo-content-article">
-				<b>Initial Models</b>
+				<p><b>Initial Models</b>
 				<p>I use a variety of mathematical techniques to predict the house price.  I begin with straightforward multiple linear regression, using city, zip, state, and type as categorical variables, with beds, baths, and square feet as numerical variables.  I then check interaction effects, by seeing the effect that different house sizes have depending on location and type, by exploring the interactions of beds*city and beds*type.</p>
 				<p>Naive bayes and decision trees are employed as well to predict price.  Furthermore, I'm interested in the effect of geographical distribution independent of zip code, so I use k-means clustering on the coordinates of the houses to put them into de facto regions, which are then fed back into the original models.  I also give an option to use k-means clustering to categorize house types in three dimensions -- beds, baths, and square-feet. </p>
-				<b>Supplementary Data</b>
-				<p>Lastly, I am interested in supplementing my data with data in public repositories.  I step back and consider what information can be decomposed in a way that adds more than the sum of its parts, and I fgure that I can create a seperate Django model for city and add several covariates.  City-data.com offers a number of interesting covariates for each US city, and the ones I can include that seem at least marginally interesting are population, median income, population density, demographics, median household value, and distance to nearest city with population > 1,000,000.  Several other measures may seem interesting (or variations of measures such as standard deviation instead of mean), but to avoid overfitting I leave these out.  Of these, I select median income, population density, and median household value.  The code should allow for additional covariates to be added in a very maintanable way.  The additional covariates are researched and loaded in manually using Django's administration page.</p>
-				<b>Future Iterations</b>
-				<p>Future iterations could find a reliable API or page with a reliable structure and use web scraping techniques to pull additional information about cities to be put arbitrarily into a database, for procedural model generation.  For example, we might be interested in the location of a house to popular businesses, bars, restaurants, job listings, events, activities, etc.  A flexible web scraping framework would provide the infrastructure to create sophisticated housing pricing models.</p>
-				
-				In summary, the following model options are available:
-				<ul>
-					<li>Multiple Linear Regression</li>
-					<li>Multiple Linear Regression with interactions</li>
-					<li>Multiple Linear Regression with interactions and clustering</li>
-					<li>Multiple Linear Regression with interactions and city data</li>
-					<li>Naive Bayes</li>
-					<li>Naive Bayes with clustering</li>
-					<li>Naive Bayes with clustering and city data</li>
-					<li>Decision trees</li> 
-					<li>Decision trees with clustering</li>
-					<li>Decision trees with clustering and city data</li>
-				<ul>
+				<p><b>Supplementary Data</b></b>
+				<p>Lastly, I am interested in supplementing my data with data in public repositories.  I step back and consider what information can be decomposed in a way that adds more than the sum of its parts, and I fgure that I can create a seperate Django model for city and add several covariates.  City-data.com offers a number of interesting covariates for each US city, and the ones I can include that seem at least marginally interesting are population, median income, population density, demographics, median household value, and distance to nearest city with population > 1,000,000.  Several other measures may seem interesting (or variations of measures such as standard deviation instead of mean), but to avoid overfitting I leave these out.  Of these, I select median income, population density, and median household value.  The code should allow for additional covariates to be added in a very maintanable way.  The additional covariates are scraped using a quickly thrown together web scraper, supplemented by manual additions in the Django admin page where no data is found.</p>
+				<p><b>Future Iterations</b></b>
+				<p>Future iterations could find a reliable API such as <a href="https://www.data.gov/developers/apis">Data.gov</a>, <a href="http://www.census.gov/data/developers/updates.html">Census.gov</a>, <a href="https://www.sba.gov/about-sba/sba_performance/sba_data_store/web_service_api">SBA.gov</a>, or pages with reliable structure and use web scraping techniques to pull additional information about cities to be put arbitrarily into a database, for procedural model generation.  For example, we might be interested in the location of a house to popular businesses, bars, restaurants, job listings, events, activities, etc.  A flexible web scraping framework would provide the infrastructure to create sophisticated housing pricing models.</p>
+				<p>Since a considerable portion of city data is unavailable, I am leaving this option disabled for the time being.  It might be worth considering the role <a href="http://en.wikipedia.org/wiki/Imputation_%28statistics%29#Multiple_imputation">imputation</a> can have on the data, where we by some methodology come up with missing data.  This works for some methods such as decision trees, where missing data can itself be a sort of a feature.  Simiarly for categorical data in Naive Bayes or linear regression, missing data might still provide response variable insight.  However with continuous data (which is what we are dealing with here), linear regression (and presumably naive bayes) would simply not include a row with missing data in the model fit.</p>
+				<p>In summary, I have three top-level models: multiple linear regression, naive bayes (regression) and and a decision tree (regression).  Each of these can also include interactions and/or clustering, for a total of 12 models.</p>
 			</div>
 		</div>
 
@@ -148,7 +165,7 @@
 			<label class="checkbox" for="clusteringCheckbox">
 			<input type="checkbox" value="clustering" id="clusteringCheckbox" data-toggle="checkbox" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>Clustering</label></li>
 			<label class="checkbox" for="supplementaryCheckbox">
-			<input type="checkbox" value="supplementary" id="supplementaryCheckbox" data-toggle="checkbox" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>Supplementary City Data</label></li>
+			<input type="checkbox" value="supplementary" id="supplementaryCheckbox" data-toggle="checkbox" disabled class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>Supplementary City Data</label></li>
 
 			<div class="demo-content demo-content-article">
 				<p>Model parameters (note that categorical variables are encoded)</p>
@@ -157,18 +174,13 @@
 				<pre class="prettyprint" id='avgDiff'>Once data is loaded, model data will go here.</pre>
 				<p>Sum of squared price difference</p>
 				<pre class="prettyprint" id='ssDiff'>Once data is loaded, model data will go here.</pre>
+				<p>Additional Metrics</p>
+				<pre class="prettyprint" id='metrics'>Once data is loaded, model data will go here.</pre>
+				<p>Histogram of actual vs. predicted prices  (light green is actual, light blue is predicted, and turqouise is their intersection)</p>
+				<pre class="prettyprint" id='histogram'>Once data is loaded, model data will go here.</pre>
 			</div>
 		</div>
 
-		<!-- Useful Visualizations and stats for models:
-			Average price difference
-			Distribution of price difference
-
-			Compare actual vs predicted price for each house (layered histograms)
-			Attribute comparison: For each attribute, x-axis contains range of attribute and Y contains average price difference.
-				This can help us understand underlying model properties, such as the distributions of underlying data as well
-				as the function that relates properties to price (linear, log, etc.)
-		-->
 	</div>
 	<!-- /Models page -->
 
@@ -339,8 +351,8 @@
  			});
 			// Set origin URL (to switch from local to production environments)
 			//origin = 'http://opendoor-interview.herokuapp.com/'
-			//origin = 'http://127.0.0.1:8000'
-			origin = 'http://0.0.0.0:5000'
+			origin = 'http://127.0.0.1:8000'
+			//origin = 'http://0.0.0.0:5000'
 			
 			// Initial map parameters
 			scale = 500
@@ -441,6 +453,13 @@
 
        			$("#ssDiff").text(model.ssDiff)
 
+				text = ''
+       			for(param in model.metrics){
+       				text += param + ": " + model.metrics[param]
+       				text += '\n'
+       			}
+       			$("#metrics").text(text)
+
        			// Change prediction output and add bubble
        			if(model.modelPrediction == null){
        				$("#predictionResult").text("")
@@ -450,6 +469,7 @@
        				Math.ceil(model.modelPrediction) + 
        				"</b><br>Scroll up to see this house outputted in the map (in black)"
        				newHouse = {'zip_code': $('[placeholder="Zip Code"]').val(),
+       					'city': $('[placeholder="City"]').val(),
 						'house_type': $('[placeholder="House Type"]').val(),
 						'fillKey': 'prediction',
 						'radius': Math.sqrt(model.modelPrediction) / 100,
@@ -464,6 +484,83 @@
        				reDrawMap()
        				$('blockquote').html(text)
        			}
+
+       			// Generate a histogram to compare prediction vs actual values
+       			$("#histogram").text('')
+
+								var actualValues = model.actualList
+				var predictedValues = model.predictedList
+
+				var margin = {top: 10, right: 30, bottom: 30, left: 30},
+				    width = 960 - margin.left - margin.right,
+				    height = 500 - margin.top - margin.bottom;
+
+				var x = d3.scale.linear()
+				    .domain([0, 1000000])
+				    .range([0, width]);
+
+				// Generate a histogram using twenty uniformly-spaced bins.
+				var actualPriceData = d3.layout.histogram()
+				    .bins(x.ticks(20))
+				    (actualValues);
+
+				var preditedPriceData = d3.layout.histogram()
+				    .bins(x.ticks(20))
+				    (predictedValues);
+
+				var y = d3.scale.linear()
+				    .domain([0, d3.max(actualPriceData, function(d) { return d.y; })])
+				    .range([height, 0]);
+				
+				var commasFormatter = d3.format(",.0f")
+				var xAxis = d3.svg.axis()
+				    .scale(x)
+				    .orient("bottom")
+				   	.tickFormat(function(d) { return "$" + commasFormatter(d) }); 
+
+				var yAxis = d3.svg.axis()
+				    .scale(y)
+				    .orient("left");
+
+				var svg = d3.select("#histogram").append("svg")
+				    .attr("width", width + margin.left + margin.right)
+				    .attr("height", height + margin.top + margin.bottom)
+				 	.append("g")
+				    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+				// Add actual prices
+				var bar = svg.selectAll(".actualBar")
+				    .data(actualPriceData)
+				  	.enter().append("g")
+				    .attr("class", "actualBar")
+				    .attr("transform", function(d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; });
+
+				bar.append("rect")
+				    .attr("x", 1)
+				    .attr("width", x(actualPriceData[0].dx) - 1)
+				    .attr("height", function(d) { return height - y(d.y); });
+
+				// Add predicted prices
+				var bar = svg.selectAll(".predictedBar")
+				    .data(preditedPriceData)
+				  	.enter().append("g")
+				    .attr("class", "predictedBar")
+				    .attr("transform", function(d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; });
+
+				bar.append("rect")
+				    .attr("x", 1)
+				    .attr("width", x(preditedPriceData[0].dx) - 1)
+				    .attr("height", function(d) { return height - y(d.y); });
+
+				svg.append("g")
+				    .attr("class", "x axis")
+				    .attr("transform", "translate(0," + height + ")")
+				    .call(xAxis);
+
+				svg.append("g")
+					.attr("class", "y axis")
+				    .call(yAxis);
+
 			}
 
 			/* ['houseCovariates':[
@@ -546,6 +643,9 @@
 					},
 				});
 
+				// Add as sweet little datamap fade
+				// $(".datamap").css('-webkit-mask-image', '-webkit-gradient(linear, left 90%, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)))')
+			
 				// Populate map with bubbles
 				map.bubbles(houseBubbles, {
 					popupTemplate: function(geo, data) {
@@ -553,8 +653,8 @@
 							latitude + ", " + longitude + "<br><b>Beds:</b> " +
 							data.beds + "<br><b>Baths:</b> " + data.baths + "<br><b>House Type:</b> " + 
 							data.house_type + "<br><b>Square Feet:</b> " + data.square_feet + "<br><b>Zip:</b> " + 
-							data.zip_code + "<br><b>Actual Price:</b> " + Math.ceil(data.actual_price) + "<br><b>Predicted Price:</b> " + 
-							Math.ceil(data.predicted_price))
+							data.zip_code + "<br><b>City: </b>" + data.city + 
+							"<br><b>Actual Price:</b> " + data.actual_price + "<br><b>Predicted Price:</b> " + data.predicted_price)
 						return null
 					}
 				});
@@ -566,6 +666,7 @@
 					longitude = data.longitude
 					reDrawMap()
 				});
+
 			}
 
 			// Boiler plate function for changing circle radii
@@ -599,6 +700,7 @@
 		       	var clustering = $('#clusteringCheckbox').is(":checked")
 		       	var supplementary = $('#supplementaryCheckbox').is(":checked")
 		       	var houseCovariates = {'zip': $('[placeholder="Zip Code"]').val(), 
+					'city': $('[placeholder="City"]').val(), 
 					'state': $('[placeholder="State"]').val(), 
 					'type': $('[placeholder="House Type"]').val(),
 					'beds': $('[placeholder="Beds"]').val(), 
@@ -670,6 +772,7 @@
 				To find the best model between large groups of models, it would be a good idea to choose models that are more robust, even if on average
 				they might not be as accurate.  My current architecture doesn't support the programatic determination of model quality.
 				</p>
+				<p>Lastly, I would be interested in more graphical displays of model performance.  For example, for each attribute I'd be interested in a histogram or scatterplot of the average price difference (y-axis) by the attribute value (x-axis).  This can help us understand underlying model properties, such as the distribution of attributes relative to price given the model, homoscedasticity, and the functions that relate properties to price (linear, log, etc.).</p>
 			</div>
 		</div>
 	</div>

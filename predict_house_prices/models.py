@@ -24,9 +24,9 @@ class House(models.Model):
 class City(models.Model):
 	city = models.CharField(max_length=1000)
 	state = models.CharField(max_length=1000)
-	median_income = models.FloatField()
-	population_density = models.FloatField()
-	median_household_value = models.FloatField()
+	median_income = models.FloatField(blank=True, null=True)
+	population_density = models.FloatField(blank=True, null=True)
+	median_household_value = models.FloatField(blank=True, null=True)
 
 	def __unicode__(self):
 		return self.city
