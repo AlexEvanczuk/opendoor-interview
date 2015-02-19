@@ -4,10 +4,10 @@ django-cors-headers==1.0.0
 gevent==1.0.1
 greenlet==0.4.5
 gunicorn==19.2.1
-numpy==1.9.0
+numpy==1.8.1
 requests==2.5.1
 scikit-learn==0.14.1
-scipy==0.15.1
+scipy==0.14.0 
 static3==0.5.1
 whitenoise==1.0.6
 wsgiref==0.1.2
