@@ -33,27 +33,10 @@
 				<li><a href="#models">Models</a></li>
 				<li><a href="#viz">Visualization</a></li>
 				<li><a href="#predict">Prediction</a></li>
-<!-- 				<li><a href="#sidr" id="simple-menu">Change Model</a></li>
- -->			</ul>
+			</ul>
 		</div>
 	</nav>
 	<!-- /Navbar -->
-
-	<!-- Side menu --> 
-<!-- 	<div id="sidr">
-		<ul>
-			<li class="active"><a href="#">Multiple Linear Regression</a></li>
-			<li><a href="#">Naive Bayes</a></li>
-			<li><a href="#">Decision Trees</a></li>
-			<li><label class="checkbox" for="checkbox1" style="padding-left:40px;">
-			<input type="checkbox" value="" id="checkbox1" data-toggle="checkbox" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>Interactions (for MLR)</label></li>
-			<li><label class="checkbox" for="checkbox2" style="padding-left:40px;">
-			<input type="checkbox" value="" id="checkbox2" data-toggle="checkbox" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>Clustering</label></li>
-			<li><label class="checkbox" for="checkbox3" style="padding-left:40px;">
-			<input type="checkbox" value="" id="checkbox3" data-toggle="checkbox" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>Supplementary City Data</label></li>
-		</ul>
-	</div> -->
-	<!-- /Side Menu -->
 
 	<!-- About page -->
 	<div class="container" id="about">
@@ -150,7 +133,12 @@
 			<input type="checkbox" value="" id="checkbox3" data-toggle="checkbox" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>Supplementary City Data</label></li>
 
 			<div class="demo-content demo-content-article">
-				<p>Model parameters and model visualization go here</p>
+				<p>Model parameters (note that categorical variables are encoded)</p>
+				<pre class="prettyprint" id='modelData'>Once data is loaded, model data will go here.</pre>
+				<p>Average price difference</p>
+				<pre class="prettyprint" id='avgDiff'>Once data is loaded, model data will go here.</pre>
+				<p>Sum of squared price difference</p>
+				<pre class="prettyprint" id='ssDiff'>Once data is loaded, model data will go here.</pre>
 			</div>
 		</div>
 
@@ -277,8 +265,8 @@
 	<script>
 		$(document).ready(function() {
 			// $('#simple-menu').sidr();
-			origin = 'http://fast-coast-5636.herokuapp.com'
-			//origin = 'http://127.0.0.1:8000'
+			//origin = 'http://fast-coast-5636.herokuapp.com'
+			origin = 'http://127.0.0.1:8000'
 			// Initial map parameters
 			scale = 1000
 			longitude = -115.478851
@@ -363,12 +351,46 @@
     		});
 
     		// Pull in model parameters for each of our models
+    		$.ajax({
+        		url: origin + '/linearmodel',
+        		dataType: "json",
+       			success: function(response) {
+       				normalLinear = response
+       			}
+       		});
 
-  			// Load map and associated functions
-  			function get_data(zip_code, beds, baths, square_feet, house_type, actual_price, predicted_price) {
-	    		return "this is a test"
-			}
+    		// Listen for radio change events
+       		$(':radio').on('change', function() {
+       			if($(this).attr('id') == 'radio1'){
+       				text = ''
+       				for(param in normalLinear.modelcoefficients){
+       					text += param + ": " + normalLinear.modelcoefficients[param]
+       					text += '\n'
+       				}
+       				$("#modelData").text(text)
+       					.css('height','300px')
+       					.css('overflow-y', 'auto')
 
+       				$("#avgDiff").text(normalLinear.averageDiff)
+
+       				$("#ssDiff").text(normalLinear.ssDiff)
+       			} else {
+       				text = ''
+       				//for(param in normalLinear.modelcoefficients){
+       				//		text += param + ": " + normalLinear.modelcoefficients[param]
+       				//	text += '\n'
+       				//}
+       				$("#modelData").text(text)
+       					.css('height','300px')
+       					.css('overflow-y', 'auto')
+
+       				$("#avgDiff").text('none')
+
+       				$("#ssDiff").text('none')
+       			}
+			});
+
+    		// Load map and associated functions
 			function reDrawMap(){
 				$('.datamap').remove()
 				var map = new Datamap({
