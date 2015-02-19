@@ -6,6 +6,7 @@ import requests, json, math, numpy
 from django.core import serializers
 from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import BayesianRidge
+from sklearn.tree import DecisionTreeRegressor
 from sklearn.feature_extraction import DictVectorizer
 import sklearn
 
@@ -41,6 +42,7 @@ def return_house_bubbles(request):
 	for house in houses:
 		house_dict = {'zip_code': house.zip_code,
 			'fillKey': house.house_type,
+			'house_type': house.house_type,
 			# Use monotonic transformation to adjust price for radius
 			'radius': math.sqrt(house.actual_price) / 100,
 			'actual_price': house.actual_price,
@@ -53,8 +55,8 @@ def return_house_bubbles(request):
 	return HttpResponse(json.dumps(bubbles))
 
 '''
-To predict, pass in JSON object of the form in a POST
-request.
+Pass in JSON object of the form in a POST
+request. House covariates is optional, used for prediction.
 
 		['houseCovariates':[
 			'zip': house.zip_code, 
@@ -63,16 +65,24 @@ request.
 			'beds': house.beds, 
 			'baths': house.baths, 
 			'sqfeet': house.square_feet
+			],
+		'modelType': ['linear', 'bayes', 'tree'],
+		'interactions': ['true','false'],
+		'clustering': ['true', 'false'],
+		'supplementary: ['true', 'false']
 		]
 '''
 def linear_model(request):
+	print("Model settings ------------") 
+	modelSettings = request.GET.dict()
+	print(modelSettings)
 
 	# Get houses and separate them into X and Y variables
 	houses = House.objects.all()
 	X = []
 	Y = []
 
-	print("House covariates ------------") 
+	#print("House covariates ------------") 
 	for house in houses:
 		houseCovariates = {
 			'zip': house.zip_code, 
@@ -91,7 +101,7 @@ def linear_model(request):
 	# to take care of the encoding of categorical data
 	#print(enumerate(X[1]))
 	#X = [dict(enumerate(covariate)) for covariate in X]
-	print("List of dicts ------------") 
+	#print("List of dicts ------------") 
 	#for dictionary in X: print(dictionary)
 
 	# Turn list of dicts into a numpy array
@@ -101,14 +111,17 @@ def linear_model(request):
 	# ordered first by key (alphabetical) then value (alphabetical)
 	X = vect.fit_transform(X)
 	
-	# 
 	print(vect.vocabulary_)
 	print(vect.feature_names_)
-	print("Numpy Array ------------") 
+	#print("Numpy Array ------------") 
 	#for arr in X: print(numpy.array_str(arr, suppress_small = True))
 
-	#clf = BayesianRidge()
+	# Default model is linear
 	clf = LinearRegression()
+	if modelSettings['modelType'] == 'bayes':
+		clf = BayesianRidge()
+
+	#clf = DecisionTreeRegressor()
 	clf.fit(X, Y)
 
 	# Train the model
@@ -142,28 +155,42 @@ def linear_model(request):
 
 		covariates = vect.transform(houseCovariates)
 
-		predictedList += [clf.predict(covariates[0])]
+		predicted_price = clf.predict(covariates[0])
+		house.predicted_price = predicted_price
+		house.save()
+
+		predictedList += [predicted_price]
 		actualList += [house.actual_price]
 
-		averageDiff += [clf.predict(covariates[0]) - house.actual_price]
-		squaredDiff += (clf.predict(covariates[0]) - house.actual_price) ** 2
+		averageDiff += [predicted_price - house.actual_price]
+		squaredDiff += (predicted_price - house.actual_price) ** 2
 	
 	print("Average Difference (actual, predicted) ------------") 
 	averageDiff = numpy.mean(averageDiff)
-
-	if request.method == 'POST':
-		predictionDict = request.POST.dict()['houseCovariates']
-		houseCovariates = vect.transform(predictionDict)
-	else:
-		houseCovariates = covariates[0] 
 
 	# Build out a dictionary of model parameters to return
 	prettyModelCoef = {}
 	for index in range(0, len(clf.coef_)):
 		prettyModelCoef[vect.feature_names_[index]] = clf.coef_[index]
 
+	# Return a prediction only if houseCovariates is passed in
+	housePrediction = None
+
+	# Note that houseCovariates should be its own dictionary
+	# but I was having issues with getting a dictionary from POST
+	# so we have an unconventional key, value pairing that should be fixed
+	# later.
+	if modelSettings.has_key('houseCovariates[beds]'):
+		houseCovariates = {'zip': modelSettings['houseCovariates[zip]'], 
+			'state': modelSettings['houseCovariates[state]'], 
+			'type': modelSettings['houseCovariates[type]'],
+			'beds': int(modelSettings['houseCovariates[beds]']), 
+			'baths': int(modelSettings['houseCovariates[baths]']), 
+			'sqfeet': int(modelSettings['houseCovariates[sqfeet]'])}
+		housePrediction = clf.predict(vect.transform(houseCovariates))[0]
+
 	response = {'modelcoefficients': prettyModelCoef,
-		'modelPrediction': clf.predict(houseCovariates),
+		'modelPrediction': housePrediction,
 		'averageDiff': averageDiff,
 		'ssDiff': squaredDiff,
 		'predictedList': predictedList,

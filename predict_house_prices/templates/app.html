@@ -108,29 +108,29 @@
 
 	<!-- Models page -->
 	<div class="container" id="models">
-		<div class="demo-row">
+		<div class="demo-row" style="margin-top: 80px;">
 			<div class="demo-title">
 				<h3>Models</h3>
 			</div>
 			<p>Select Model</p>
 			<label class="radio" for="radio1">
-				<input type="radio" name="optionsRadios1" value="" id="radio1" data-toggle="radio" class="custom-radio" checked="checked"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
+				<input type="radio" name="optionsRadios1" value="linear" id="radio1" data-toggle="radio" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
 				<b>Multiple Linear Regression</b>
 			</label>
 			<label class="radio" for="radio2">
-				<input type="radio" name="optionsRadios1" value="" id="radio2" data-toggle="radio" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
+				<input type="radio" name="optionsRadios1" value="bayes" id="radio2" data-toggle="radio" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
 				<b>Naive Bayes</b>
 			</label>
 			<label class="radio" for="radio3">
-				<input type="radio" name="optionsRadios1" value="" id="radio3" data-toggle="radio" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
+				<input type="radio" name="optionsRadios1" value="tree" id="radio3" data-toggle="radio" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
 				<b>Decision Trees</b>
 			</label>
-			<label class="checkbox" for="checkbox1">
-			<input type="checkbox" value="" id="checkbox1" data-toggle="checkbox" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>Interactions (for MLR)</label></li>
-			<label class="checkbox" for="checkbox2">
-			<input type="checkbox" value="" id="checkbox2" data-toggle="checkbox" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>Clustering</label></li>
-			<label class="checkbox" for="checkbox3">
-			<input type="checkbox" value="" id="checkbox3" data-toggle="checkbox" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>Supplementary City Data</label></li>
+			<label class="checkbox" for="interactionsCheckbox">
+			<input type="checkbox" value="interactions" id="interactionsCheckbox" data-toggle="checkbox" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>Interactions (for MLR)</label></li>
+			<label class="checkbox" for="clusteringCheckbox">
+			<input type="checkbox" value="clustering" id="clusteringCheckbox" data-toggle="checkbox" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>Clustering</label></li>
+			<label class="checkbox" for="supplementaryCheckbox">
+			<input type="checkbox" value="supplementary" id="supplementaryCheckbox" data-toggle="checkbox" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>Supplementary City Data</label></li>
 
 			<div class="demo-content demo-content-article">
 				<p>Model parameters (note that categorical variables are encoded)</p>
@@ -156,7 +156,7 @@
 
 	<!-- Visualization page -->
 	<div class="container" style="height:500px;" id="viz">
-		<div class="demo-row">
+		<div class="demo-row" style="margin-top: 80px;">
 			<div class="demo-title">
 				<h3>Visualization</h3>
 			</div>
@@ -176,8 +176,8 @@
 	<!-- /Visualization page -->
 
 	<!-- Prediction page -->
-	<div class="container" style="padding-top: 150px;" id="predict">
-		<div class="demo-row">
+	<div class="container" id="predict">
+		<div class="demo-row" style="margin-top: 80px;">
 			<div class="demo-title">
 				<h3>Prediction</h3>
 			</div>
@@ -186,35 +186,34 @@
 				<p>Input house fields here to predict their price!<br>Note that we only allow previously trained categorical data to be inputted, and a specified continuous range for each field.  This is in order to ensure that we are predicting mostly within the range (interpolation) without too much irresponsible extrapolation.<br>Click on a field to see a valid data range.</p>
 				<div>
 					<div style="float:left">
-						<input type="text" placeholder="Street" class="form-control" style="width:300px; margin-bottom: 10px;"/>
-						<input type="text" placeholder="City" class="form-control" style="width:300px; margin-bottom: 10px;"/>
-						<input type="text" placeholder="Zip Code" class="form-control" style="width:300px; margin-bottom: 10px;"/>
-						<input type="text" placeholder="State" class="form-control" style="width:300px; margin-bottom: 10px;"/>
-						<input type="text" placeholder="Beds" class="form-control" style="width:300px; margin-bottom: 10px;"/>
-						<input type="text" placeholder="Baths" class="form-control" style="width:300px; margin-bottom: 10px;"/>
-						<input type="text" placeholder="Square Feet" class="form-control" style="width:300px; margin-bottom: 10px;"/>
-						<input type="text" placeholder="House Type" class="form-control" style="width:300px; margin-bottom: 10px;"/>
-						<input type="text" placeholder="Sale Date" class="form-control" style="width:300px; margin-bottom: 10px;"/>
-						<input type="text" placeholder="Latitude" class="form-control" style="width:300px; margin-bottom: 10px;"/>
-						<input type="text" placeholder="Longitude" class="form-control" style="width:300px; margin-bottom: 10px;"/>
+						<div class='predictInput'><input type="text" placeholder="Street" class="form-control" style="width:300px; margin-bottom: 10px;"/></div>
+						<div class='predictInput'><input type="text" placeholder="City" class="form-control" style="width:300px; margin-bottom: 10px;"/></div>
+						<div class='predictInput'><input type="text" placeholder="Zip Code" class="form-control" style="width:300px; margin-bottom: 10px;"/></div>
+						<div class='predictInput'><input type="text" placeholder="State" class="form-control" style="width:300px; margin-bottom: 10px;"/></div>
+						<div class='predictInput'><input type="text" placeholder="Beds" class="form-control" style="width:300px; margin-bottom: 10px;"/></div>
+						<div class='predictInput'><input type="text" placeholder="Baths" class="form-control" style="width:300px; margin-bottom: 10px;"/></div>
+						<div class='predictInput'><input type="text" placeholder="Square Feet" class="form-control" style="width:300px; margin-bottom: 10px;"/></div>
+						<div class='predictInput'><input type="text" placeholder="House Type" class="form-control" style="width:300px; margin-bottom: 10px;"/></div>
+						<div class='predictInput'><input type="text" placeholder="Sale Date" class="form-control" style="width:300px; margin-bottom: 10px;"/></div>
+						<div class='predictInput'><input type="text" placeholder="Latitude" class="form-control" style="width:300px; margin-bottom: 10px;"/></div>
+						<div class='predictInput'><input type="text" placeholder="Longitude" class="form-control" style="width:300px; margin-bottom: 10px;"/></div>
 					</div>
 					<div style="float:left; padding-left: 15px; width: 800px; word-wrap: break-word;" id="validData">
-
 						<script>
 							// Here we create the click events for each of our fields to list the valid data range
-							$("[placeholder]").click(function() {
+							$("[placeholder]").focus(function() {
 									switch($(this).attr('placeholder')){
 										case 'Street':
 											$("#validData").html("Any string will do")
 											break;
 										case 'City':
-											$("#validData").html("Type any of the following (case-sensitive):<br><p style='overflow-y: auto; overflow-x: auto;'> " + uniqueCities + "</p>")
+											$("#validData").html("Type any of the following (case-sensitive):<br><p style='overflow-y: auto; overflow-x: auto;'> " + uniqueCities.join([separator = ', ']) + "</p>")
 											break;
 										case 'Zip Code':
-											$("#validData").html("Type any of the following (case-sensitive):<br><p style='overflow-y: auto; overflow-x: auto;'> " + uniqueZipCodes + "</p>")
+											$("#validData").html("Type any of the following (case-sensitive):<br><p style='overflow-y: auto; overflow-x: auto;'> " + uniqueZipCodes.join([separator = ', ']) + "</p>")
 											break;
 										case 'State': 
-											$("#validData").html("Type any of the following (case-sensitive):<br><p style='overflow-y: auto; overflow-x: auto;'> " + uniqueStates + "</p>")
+											$("#validData").html("Type any of the following (case-sensitive):<br><p style='overflow-y: auto; overflow-x: auto;'> " + uniqueStates.join([separator = ', ']) + "</p>")
 											break;
 										case 'Beds':
 											$("#validData").html("Numerical low ranges are calculated by taking the maximum of zero or one standard deviation below the lowest value in our data set and rounding.<br>" +
@@ -229,10 +228,10 @@
 										case 'Square Feet':
 											$("#validData").html("Numerical low ranges are calculated by taking the maximum of zero or one standard deviation below the lowest value in our data set and rounding.<br>" +
 												"Numerical high ranges are calculated by adding one standard deviation to the maximum value in our data set and rounding.<br>" +
-												"Please enter a number between " + squareFeet[0] + " and " + squareFeet[1] + ".")
+												"Please enter a number between " + squareFeetRange[0] + " and " + squareFeetRange[1] + ".")
 											break;
 										case 'House Type':
-											$("#validData").html("Type any of the following (case-sensitive):<br><p style='overflow-y: auto; overflow-x: auto;'> " + uniqueHouseTypes + "</p>")
+											$("#validData").html("Type any of the following (case-sensitive):<br><p style='overflow-y: auto; overflow-x: auto;'> " + uniqueHouseTypes.join([separator = ', ']) + "</p>")
 											break;
 										case 'Sale Date':
 											$("#validData").html("Any string will do")
@@ -247,6 +246,54 @@
 											// Do nothing											
 									}
 							});
+							$("[placeholder]").focusout(function() {
+								input = $(this).val()
+								goodInput = false
+								switch($(this).attr('placeholder')){
+										case 'Street':
+											goodInput = input.length > 0
+											break;
+										case 'City':
+											goodInput = $.inArray(input, uniqueCities) != -1
+											break;
+										case 'Zip Code':
+											goodInput = $.inArray(input, uniqueZipCodes) != -1
+											break;
+										case 'State': 
+											goodInput = $.inArray(input, uniqueStates) != -1
+											break;
+										case 'Beds':
+											goodInput = (bedRange[0] <= input && input <= bedRange[1] && input != "")
+											break;
+										case 'Baths':
+											goodInput = (bathsRange[0] <= input && input <= bathsRange[1] && input != "")
+											break;
+										case 'Square Feet':
+											goodInput = (squareFeetRange[0] <= input && input <= squareFeetRange[1] && input != "")
+											break;
+										case 'House Type':
+											goodInput = $.inArray(input, uniqueHouseTypes) != -1
+											break;
+										case 'Sale Date':
+											goodInput = input.length > 0
+											break;
+										case 'Latitude':
+											goodInput = (-90.0 <= input && input <= 90.0 && input != "")
+											break;
+										case 'Longitude':
+											goodInput = (-180.0 <= input && input <= 180.0 && input != "")
+											break;
+										default:
+								}
+
+								if(goodInput) { 
+									$(this).parent().removeClass('has-error')
+									$(this).parent().addClass('has-success')
+								} else {
+									$(this).parent().removeClass('has-success')
+									$(this).parent().addClass('has-error')
+								}
+							});
 						</script>
 					</div>
 				</div>
@@ -255,20 +302,21 @@
 	</div>
 	
 	<div class="container">
-		<blockquote>
-			Using data trained with a Naive Bayes classifier, we predict this house will sell for 112312.  Scroll up to see this house outputted in the map (in black).
-		</blockquote>
+		<blockquote id="predictionResult"></blockquote>
+		<button class="btn btn-hg btn-primary disabled" id="predictButton">Predict</button>
+		
 	</div>
 	<!-- /Prediction page -->
 
 	<!-- Scripts -->
 	<script>
 		$(document).ready(function() {
-			// $('#simple-menu').sidr();
-			//origin = 'http://fast-coast-5636.herokuapp.com'
-			origin = 'http://127.0.0.1:8000'
+			// Set origin URL (to switch from local to production environments)
+			origin = 'http://fast-coast-5636.herokuapp.com'
+			//origin = 'http://127.0.0.1:8000'
+
 			// Initial map parameters
-			scale = 1000
+			scale = 500
 			longitude = -115.478851
 			latitude = 38.575764
 
@@ -339,10 +387,10 @@
 						houseType.push($(this).attr('fields').house_type) 
 					});
 					
-					uniqueCities = $.unique(cities).sort().join([separator = ', '])
-					uniqueZipCodes = $.unique(zipCodes).sort().join([separator = ', '])
-					uniqueStates = $.unique(states).sort().join([separator = ', '])
-					uniqueHouseTypes = $.unique(houseType).sort().join([separator = ', '])
+					uniqueCities = $.unique(cities).sort()
+					uniqueZipCodes = $.unique(zipCodes).sort()
+					uniqueStates = $.unique(states).sort()
+					uniqueHouseTypes = $.unique(houseType).sort()
 
 					bedRange = returnRange(beds)
 					bathsRange = returnRange(baths)
@@ -350,44 +398,89 @@
         		}
     		});
 
-    		// Pull in model parameters for each of our models
-    		$.ajax({
-        		url: origin + '/linearmodel',
-        		dataType: "json",
-       			success: function(response) {
-       				normalLinear = response
+			// Boiler plate functions to change/get model data
+			function changeModelData(model){
+				text = ''
+       			for(param in model.modelcoefficients){
+       				text += param + ": " + model.modelcoefficients[param]
+       				text += '\n'
        			}
-       		});
+       			
+       			$("#modelData").text(text)
+       				.css('height','300px')
+       				.css('overflow-y', 'auto')
 
-    		// Listen for radio change events
+       			$("#avgDiff").text(model.averageDiff)
+
+       			$("#ssDiff").text(model.ssDiff)
+
+       			// Change prediction output and add bubble
+       			if(model.modelPrediction == null){
+       				$("#predictionResult").text("")
+       			// If no model is selected, inform the user
+       			} else { 
+       				text = "Using data trained with your currently selected model, <br>we predict this house will sell for: <b>" + 
+       				Math.ceil(model.modelPrediction) + 
+       				"</b><br>Scroll up to see this house outputted in the map (in black)"
+       				newHouse = {'zip_code': $('[placeholder="Zip Code"]').val(),
+						'house_type': $('[placeholder="House Type"]').val(),
+						'fillKey': 'prediction',
+						'radius': Math.sqrt(model.modelPrediction) / 100,
+						'actual_price': 'Unknown',
+						'beds': $('[placeholder="Beds"]').val(), 
+						'baths': $('[placeholder="Baths"]').val(),
+						'square_feet': $('[placeholder="Square Feet"]').val(),
+						'predicted_price': model.modelPrediction,
+						'latitude': $('[placeholder="Latitude"]').val(),
+						'longitude': $('[placeholder="Longitude"]').val()}
+       				houseBubbles.push(newHouse)
+       				reDrawMap()
+       				$('blockquote').html(text)
+       			}
+			}
+
+			/* ['houseCovariates':[
+				'zip': house.zip_code, 
+				'state': house.state, 
+				'type': house.house_type,
+				'beds': house.beds, 
+				'baths': house.baths, 
+				'sqfeet': house.square_feet
+				]
+			'modelType': ['linear', 'bayes', 'tree'],
+			'interactions': ['true','false'],
+			'clustering': ['true', 'false'],
+			'supplementary: ['true', 'false']
+			*/
+			function getModelData(modelType, interactions, clustering, supplementary, houseCovariates){
+				$.ajax({
+        				url: origin + '/linearmodel',
+        				dataType: "json",
+        				data: {'houseCovariates': houseCovariates,
+								'modelType': modelType,
+								'interactions': interactions,
+								'clustering': clustering,
+								'supplementary': supplementary},
+       					success: function(response) {
+       						changeModelData(response)
+       						reDrawMap()
+       						return(response)
+       					},
+       					error: function (xhr, ajaxOptions, thrownError) {
+     						console.log(xhr.status);
+        					console.log(thrownError);
+      					}
+
+       				});
+			}
+
+    		// Pull in model parameters for each of our models upon radio change events
        		$(':radio').on('change', function() {
-       			if($(this).attr('id') == 'radio1'){
-       				text = ''
-       				for(param in normalLinear.modelcoefficients){
-       					text += param + ": " + normalLinear.modelcoefficients[param]
-       					text += '\n'
-       				}
-       				$("#modelData").text(text)
-       					.css('height','300px')
-       					.css('overflow-y', 'auto')
-
-       				$("#avgDiff").text(normalLinear.averageDiff)
-
-       				$("#ssDiff").text(normalLinear.ssDiff)
-       			} else {
-       				text = ''
-       				//for(param in normalLinear.modelcoefficients){
-       				//		text += param + ": " + normalLinear.modelcoefficients[param]
-       				//	text += '\n'
-       				//}
-       				$("#modelData").text(text)
-       					.css('height','300px')
-       					.css('overflow-y', 'auto')
-
-       				$("#avgDiff").text('none')
-
-       				$("#ssDiff").text('none')
-       			}
+       			var modelType = $(':radio:checked').val()
+       			var interactions = $('#interactionsCheckbox').is(":checked")
+       			var clustering = $('#clusteringCheckbox').is(":checked")
+       			var supplementary = $('#supplementaryCheckbox').is(":checked")
+       			getModelData(modelType, interactions, clustering, supplementary, {})
 			});
 
     		// Load map and associated functions
@@ -399,6 +492,7 @@
 						popupOnHover: true,
 						highlightOnHover: false
 					},
+					height:'380px',
 					bubblesConfig: {
 						popupOnHover: true
 					},
@@ -407,7 +501,9 @@
 						'Condo': '#1abc9c',
 						'Multi-Family': '#1abc9c',
 						'Residential': '#3498db',
-						'Unkown': '#e74c3c'
+						// Refers to unknown house type
+						'Unkown': '#e74c3c',
+						'prediction': '#000000'
 					},
 						
 					// Zoom in on Sacramento, CA
@@ -429,9 +525,9 @@
 						$("#mapData").html("<b>Lat, long:</b> " + 
 							latitude + ", " + longitude + "<br><b>Beds:</b> " +
 							data.beds + "<br><b>Baths:</b> " + data.baths + "<br><b>House Type:</b> " + 
-							data.fillKey + "<br><b>Square Feet:</b> " + data.square_feet + "<br><b>Zip:</b> " + 
-							data.zip_code + "<br><b>Actual Price:</b> " + data.actual_price + "<br><b>Predicted Price:</b> " + 
-							data.predicted_price)
+							data.house_type + "<br><b>Square Feet:</b> " + data.square_feet + "<br><b>Zip:</b> " + 
+							data.zip_code + "<br><b>Actual Price:</b> " + Math.ceil(data.actual_price) + "<br><b>Predicted Price:</b> " + 
+							Math.ceil(data.predicted_price))
 						return null
 					}
 				});
@@ -463,6 +559,40 @@
     			scale /= 2
 				reDrawMap()
 			});
+
+			// When button is pressed, validate fields and send data to getModelData
+			// Note that a bubble is automatically added in getmodeldata if a prediction is 
+			// returned.  It might be better to separate this functionality out.
+			$('#predictButton').click(function() {
+				// Validate fields
+
+				// Get model prediction
+				var modelType = $(':radio:checked').val()
+		       	var interactions = $('#interactionsCheckbox').is(":checked")
+		       	var clustering = $('#clusteringCheckbox').is(":checked")
+		       	var supplementary = $('#supplementaryCheckbox').is(":checked")
+		       	var houseCovariates = {'zip': $('[placeholder="Zip Code"]').val(), 
+					'state': $('[placeholder="State"]').val(), 
+					'type': $('[placeholder="House Type"]').val(),
+					'beds': $('[placeholder="Beds"]').val(), 
+					'baths': $('[placeholder="Baths"]').val(), 
+					'sqfeet': $('[placeholder="Square Feet"]').val()
+					}
+				if(typeof $(':radio:checked').val() == 'undefined'){
+       				$('blockquote').text("Please select a model.")
+       			} else {
+		       		getModelData(modelType, interactions, clustering, supplementary, houseCovariates)       				
+       			}
+			});
+
+			// Set an interval to check if all input fields are correctly filled out.
+			// If so, enable button.  Else, disable button
+			setInterval(function () {
+				if($('.has-success').length == 11) {
+					$('#predictButton').removeClass('disabled')
+				} else {
+					$('#predictButton').addClass('disabled')
+				}}, 500)
 		});
 	</script>
 	<!-- /Scripts -->
@@ -482,7 +612,7 @@
 				<p><a href="http://designmodo.github.io/Flat-UI/">FlatUI - Free User Interface Kit</a>: Relatively simple to use, and provides for a clean, simple, modern design.</p>
 				<p><a href="http://www.city-data.com/city/Rio-Linda-California.html">CityData - Information about different cities</a>: Semi-structured city data.</p>
 				<p><a href="http://datamaps.github.io/">DataMaps - Visual city data</a>: Extremely easy to use, perhaps not flexible enough for more advanced usage, but could possibly modify the source.</p>
-				<p><a href="http://scikit-learn.org/">Sci-Kit - Machine learning package for python</a>: Very unstable, would recommend any future projects insource machine learning algorithms (see below).</p>
+				<p><a href="http://scikit-learn.org/">Sci-Kit - Machine learning package for python</a>: Would probably recommend any future projects insource machine learning algorithms (see below).</p>
 				<p><a href="https://devcenter.heroku.com/articles/getting-started-with-django">Heroku - Hosting for (Django) webapps</a>: Would not recommend for large-scale production environment.</p>
 				<p><a href="http://aws.amazon.com/s3/">Amazon S3 with Cloudfront - Static file serving</a>: Simple to use and to configure CORS</p>
 
@@ -493,14 +623,26 @@
 					deploy scikit-learn, along with the usage of particular versions of numpy, scipy, and scikit-learn, and a modification
 					to the configuration setup for Heroku (changing the stack, etc.).<p>
 				<p>Even when Heroku has been properly configured to run scikit-learn, or when running the app locally, 
-					scikit learn fails for reasons which are largely unclear and poorly documented.  To guarantee performance and
-					stability of a data science backend, it might be worth considering building from scratch, or diving deeper
-					into the package to ensure stability.
+					scikit learn does not guarantee perforamnce or stability.  It might be worth considering building from scratch, 
+					or diving deeper into the package to ensure stability.
 					<p>
 				<p><b>General Technical Architecture (and caching)</b></p>
 				<p>The ideal setup would be to have a well-documented schema that is extremely flexible, on top of which sit a web-scraping application that pulls data from a number of sources and inputs it into models, as well as a machine learning application which runs all permutations and combinations of possible machine learning algorithms on top of the data on a regular interval. 
 					The machine learning application should cache model parameters, so future requests do not need to tediously rerun model fitting algorithms, which could become a resource hog if they are run everytime a client requests a page or a prediction.
 					My current setup does not cache anything, and will run the full stack (pulling from the database, transforming the data to be put into the models, and fitting hte model) every time a machine learning related request is made. 
+				</p>
+				<p><b>Model Improvements</b></p>
+				<p>There are a lot of improvements to be made in my data.  First of all, I do not split training and testing data.
+				It would be wise to split my data into groups to verify that I'm not overfitting my models, or possibly to cross validate by
+				splitting my data into k groups, where I run k-1 models that each use the concatenated data from k-1 groups to train and test on
+				the remaining group, then compare the model parameters.  If I see large variances of coefficient values of models in this 
+				cross validating method, it's likely the case that I'm overfitting and the model I'm using is not robust.  Since I have 3 possible
+				top-level model types with 3 binary options to include, I have 3*2^3=24 models, which could be see as p-value fishing.
+				</p>
+				<p>
+				To find the best model between large groups of models, it would be a good idea to choose models that are more robust, even if on average
+				they might not be as accurate.  My current architecture doesn't support the programatic determination of model quality.
+				</p>
 			</div>
 		</div>
 	</div>
