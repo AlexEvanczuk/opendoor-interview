@@ -17,6 +17,7 @@ class House(models.Model):
 	predicted_price = models.FloatField(null = True)
 	latitude = models.FloatField()
 	longitude = models.FloatField()
+	cluster = models.CharField(max_length = 10, blank=True)
 
 	def __unicode__(self):
 		return u'%s %s' % (self.zip_code, self.house_type)
@@ -33,3 +34,8 @@ class City(models.Model):
 
 	class Meta:
 		verbose_name_plural = "Cities"
+
+class Cluster(models.Model):
+	index = models.CharField(max_length = 10, primary_key=True)
+	latitude = models.FloatField()
+	longitude = models.FloatField()

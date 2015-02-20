@@ -15,7 +15,9 @@ urlpatterns = patterns('',
     url(r'^loaddata/', views.load_data),
     url(r'^returnhouses/', views.return_houses),
     url(r'^returnhousebubbles/', views.return_house_bubbles),
+    url(r'^returnclusters/', views.return_clusters),
     url(r'^linearmodel/', views.linear_model),
-    url(r'^loadcities/', views.load_cities)
+    url(r'^loadcities/', views.load_cities),
+    url(r'^loadclusters/', views.cluster_data)
 
 )

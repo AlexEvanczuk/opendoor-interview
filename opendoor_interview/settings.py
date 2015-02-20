@@ -65,10 +65,22 @@ WSGI_APPLICATION = 'opendoor_interview.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
+# PSQL database on Heroku
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": "d4dombo25dq2fu",
+        "USER": "sunftcpjpplddd",
+        "PASSWORD": "RHqZmpJdtq8XG5E_1X8--zjE7v",
+        "HOST": "ec2-107-22-249-138.compute-1.amazonaws.com",
+        "PORT": "5432",
     }
 }
 

@@ -93,7 +93,7 @@
 			</div>
 
 			<div class="demo-content demo-content-article">
-				<p>An easy to use interactive infographic to predict housing prices in the California area using a variety of statistical methods.  This is based on data provided by <a href="https://www.opendoor.com/">Opendoor</a> as well as supplementary data found on <a href="https://www.city-data.com/">City-data</a>.</p>
+				<p>An easy to use interactive infographic to predict housing prices in the California area using a variety of statistical methods using <a href="https://www.opendoor.com/">Opendoor</a> data.</p>
 				<p>If you like this, feel free to <a href="https://github.com/AlexEvanczuk/opendoor-interview">fork me on github</a> and make any contributions there or to contact me about the project.</p>
 			</div>
 		</div>
@@ -106,12 +106,12 @@
 			<div class="demo-content demo-content-article">
 				<p><b>Initial Models</b>
 				<p>I use a variety of mathematical techniques to predict the house price.  I begin with straightforward multiple linear regression, using city, zip, state, and type as categorical variables, with beds, baths, and square feet as numerical variables.  I then check interaction effects, by seeing the effect that different house sizes have depending on location and type, by exploring the interactions of beds*city and beds*type.</p>
-				<p>Naive bayes and decision trees are employed as well to predict price.  Furthermore, I'm interested in the effect of geographical distribution independent of zip code, so I use k-means clustering on the coordinates of the houses to put them into de facto regions, which are then fed back into the original models.  I also give an option to use k-means clustering to categorize house types in three dimensions -- beds, baths, and square-feet. </p>
+				<p>Naive bayes and decision trees are employed as well to predict price.  Furthermore, I'm interested in the effect of non-census (i.e. zip code) geographical distribution, so I use k-means clustering on the coordinates of the houses to put them into de facto regions, which can be fed back into the original models.</p>
 				<p><b>Supplementary Data</b></b>
-				<p>Lastly, I am interested in supplementing my data with data in public repositories.  I step back and consider what information can be decomposed in a way that adds more than the sum of its parts, and I fgure that I can create a seperate Django model for city and add several covariates.  City-data.com offers a number of interesting covariates for each US city, and the ones I can include that seem at least marginally interesting are population, median income, population density, demographics, median household value, and distance to nearest city with population > 1,000,000.  Several other measures may seem interesting (or variations of measures such as standard deviation instead of mean), but to avoid overfitting I leave these out.  Of these, I select median income, population density, and median household value.  The code should allow for additional covariates to be added in a very maintanable way.  The additional covariates are scraped using a quickly thrown together web scraper, supplemented by manual additions in the Django admin page where no data is found.</p>
+				<p>Lastly, I am interested in supplementing my data with data in public repositories.  I step back and consider what information can be decomposed in a way that adds more than the sum of its parts, and I figure that I can create a seperate Django model for city and add several covariates.  City-data.com offers a number of interesting covariates for each US city, and the ones I can include that seem at least marginally interesting are population, median income, population density, demographics, median household value, and distance to nearest city with population > 1,000,000.  Several other measures may seem interesting (or variations of measures such as standard deviation instead of mean), but to avoid overfitting I leave these out.  Of these, I select median income, population density, and median household value.  The code should allow for additional covariates to be added in a very maintanable way.  The additional covariates are scraped using a quickly thrown together web scraper, supplemented by manual additions in the Django admin page where no data is found.</p>
 				<p><b>Future Iterations</b></b>
-				<p>Future iterations could find a reliable API such as <a href="https://www.data.gov/developers/apis">Data.gov</a>, <a href="http://www.census.gov/data/developers/updates.html">Census.gov</a>, <a href="https://www.sba.gov/about-sba/sba_performance/sba_data_store/web_service_api">SBA.gov</a>, or pages with reliable structure and use web scraping techniques to pull additional information about cities to be put arbitrarily into a database, for procedural model generation.  For example, we might be interested in the location of a house to popular businesses, bars, restaurants, job listings, events, activities, etc.  A flexible web scraping framework would provide the infrastructure to create sophisticated housing pricing models.</p>
-				<p>Since a considerable portion of city data is unavailable, I am leaving this option disabled for the time being.  It might be worth considering the role <a href="http://en.wikipedia.org/wiki/Imputation_%28statistics%29#Multiple_imputation">imputation</a> can have on the data, where we by some methodology come up with missing data.  This works for some methods such as decision trees, where missing data can itself be a sort of a feature.  Simiarly for categorical data in Naive Bayes or linear regression, missing data might still provide response variable insight.  However with continuous data (which is what we are dealing with here), linear regression (and presumably naive bayes) would simply not include a row with missing data in the model fit.</p>
+				<p>Future iterations could find a reliable API such as <a href="https://www.data.gov/developers/apis">Data.gov</a>, <a href="http://www.census.gov/data/developers/updates.html">Census.gov</a>, <a href="https://www.sba.gov/about-sba/sba_performance/sba_data_store/web_service_api">SBA.gov</a>, or pages with reliable structure and use web scraping techniques to pull additional information about cities to be put arbitrarily into a database, for procedural model generation.  For example, we might be interested in the location of a house to popular businesses, bars, restaurants, job listings, events, activities, etc.  A flexible web scraping framework would provide the infrastructure to create sophisticated house pricing models.</p>
+				<p>Since a considerable portion of city data is unavailable, I am leaving this option disabled for the time being.  It might be worth considering the role <a href="http://en.wikipedia.org/wiki/Imputation_%28statistics%29#Multiple_imputation">imputation</a> can have on the data, where we by some methodology come up with missing data.  This works for some methods such as decision trees, where missing data can itself be a sort of a feature.  Simiarly for categorical data in Naive Bayes or linear regression, missing data might still provide response variable insight.  However, with numerical data, linear regression (and presumably naive bayes) would simply not include a row with missing data in the model fit.</p>
 				<p>In summary, I have three top-level models: multiple linear regression, naive bayes (regression) and and a decision tree (regression).  Each of these can also include interactions and/or clustering, for a total of 12 models.</p>
 			</div>
 		</div>
@@ -122,9 +122,9 @@
 			</div>
 
 			<div class="demo-content demo-content-article">
-				<p>This project is presented as a Django web app hosted on Heroku.  On the backend, I keep the default Django database, and create a model for each house with each field stored as a property with the respective data type.  These models are pulled into a Django view for the data analysis.  While it may be wise for larger data sets to store model results in server memory (or at least as a set of parameters for easy model recreation), in this case I recreate the model on every page load.  This ensures that the model always incorporates all data in the database.</p>
-				<p>The page is laid out with four views: about, models, visualization, and prediction.  The about page  outlines the purpose of the project.  The models page allows you to see the mathematical output of your model's parameters and visualize the model on graphs and charts.  The visualization page presents a map which uses D3 to display the results visually.  Every node is a house.  Nodes are placed based on longitude and latitude, sized according to (actual) price, darkened according to square feet, and colored according to type.  Each of these adjustments can be turned on or off.  Hover over nodes to display each property of a node, as well as its predicted price.</p>
-				<p>Lastly, I offer the ability to predict the price of a new house.  In the input new house box, you can input the values of each property of the house, and it will output the predicted price of that house, as well as place the new house on the map.  Note that for the sake of presentation, the node color will be greyscale.  Also note that the input fields only allow for domain selection for previously predicted categories, or continuous values within one standard deviation of the domain.</p>
+				<p>This project is presented as a Django web app hosted on Heroku.  On the backend, I use a PSQL database provided by Heroku, and create a model for each house with each field stored as a property with the respective data type, as well as models for cities and clusters.  These models are pulled into a Django view for the data analysis.  While it may be wise for larger data sets to store model results in server memory (or at least as a set of parameters for easy model recreation), in this case I recreate the model on every page load.  This ensures that the model always incorporates all data in the database.</p>
+				<p>The page is laid out with four views: about, models, visualization, and prediction.  The about page  outlines the purpose of the project.  The models page allows you to see the mathematical output of your model's parameters and visualize the model on graphs and charts.  The visualization page presents a map which uses D3 to display the results visually.  Every node is a house.  Nodes are placed based on longitude and latitude, sized according to (actual) price, and colored according to type.  Hover over nodes to display each property of a node, as well as its predicted price.</p>
+				<p>Lastly, I offer the ability to predict the price of a new house.  In the input new house box, you can input the values of each property of the house, and it will output the predicted price of that house, as well as place the new house on the map in black.  The input fields only allow for domain selection for previously predicted categories, or continuous values within one standard deviation of the domain.</p>
 			</div>
 		</div>
 
@@ -134,7 +134,7 @@
 			</div>
 
 			<div class="demo-content demo-content-article">
-				<p>I used the flat-ui user interface kit with user interactions designed manually to create this web-app.  I wanted the user experience to feel like a single interactive infographic where changed state data creates global change, rather than a "settings based" website (though the distinction is perhaps not clear).  Their is a clear division of functionality.  All visualizations and interactions post-model generations are displayed in the main page, and any changes to model creation are done in the sidebar.</p>
+				<p>I used the flat-ui user interface kit with user interactions designed mostly manually to create this web-app. </p>
 				<p>Simple is good.</p>
 			</div>
 		</div>
@@ -369,6 +369,14 @@
         		}
     		});
 
+    		// Load cluster data
+    		$.ajax({
+        		url: origin + '/returnclusters',
+       			success: function(response) {
+					clusters = JSON.parse(response)
+        		}
+    		});
+
     		// Some basic math functions for returning a valid range
     		function standardDeviation(values){
   				var avg = average(values);
@@ -598,12 +606,37 @@
        				});
 			}
 
-    		// Pull in model parameters for each of our models upon radio change events
+    		// Pull in model parameters for each of our models upon radio change or checkbox events events
        		$(':radio').on('change', function() {
        			var modelType = $(':radio:checked').val()
        			var interactions = $('#interactionsCheckbox').is(":checked")
        			var clustering = $('#clusteringCheckbox').is(":checked")
        			var supplementary = $('#supplementaryCheckbox').is(":checked")
+       			getModelData(modelType, interactions, clustering, supplementary, {})
+			});
+
+       		$(':checkbox').on('change', function() {
+       			var modelType = $(':radio:checked').val()
+       			var interactions = $('#interactionsCheckbox').is(":checked")
+       			var clustering = $('#clusteringCheckbox').is(":checked")
+       			var supplementary = $('#supplementaryCheckbox').is(":checked")
+
+       			// If clustering is checked, add a clusterdata info box if one doesn't already exist, 
+       			if($(this).val() == 'clustering') {
+       				if(clustering == true) {
+       					text = ''
+       					for(c in clusters){
+       						text += "Cluster Index " + clusters[c].cluster + ": " + clusters[c].latitude + ", " + clusters[c].longitude
+       						text += '\n'
+       					}
+       			
+       					$('#models').append('<div id="clusterData"><p>The latitude and longitude for the centroid of each cluster (also added to the map below)</p>' +
+							"<pre class=''prettyprint'>" + text + "</pre><div>")
+       				} else {
+       					$('#clusterData').remove()
+       				}
+       			}
+       			
        			getModelData(modelType, interactions, clustering, supplementary, {})
 			});
 
@@ -622,12 +655,13 @@
 					},
 					fills: {
 						'defaultFill': '#ABDDA4',
-						'Condo': '#1abc9c',
-						'Multi-Family': '#1abc9c',
-						'Residential': '#3498db',
+						'Condo': '#3498db',
+						'Multi-Family': '#e74c3c',
+						'Residential': '#9b59b6',
 						// Refers to unknown house type
-						'Unkown': '#e74c3c',
-						'prediction': '#000000'
+						'Unkown': '#ecf0f1',
+						'prediction': '#000000',
+						'cluster': '#7f8c8d'
 					},
 						
 					// Zoom in on Sacramento, CA
@@ -646,18 +680,40 @@
 				// Add as sweet little datamap fade
 				// $(".datamap").css('-webkit-mask-image', '-webkit-gradient(linear, left 90%, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)))')
 			
-				// Populate map with bubbles
-				map.bubbles(houseBubbles, {
-					popupTemplate: function(geo, data) {
-						$("#mapData").html("<b>Lat, long:</b> " + 
-							latitude + ", " + longitude + "<br><b>Beds:</b> " +
-							data.beds + "<br><b>Baths:</b> " + data.baths + "<br><b>House Type:</b> " + 
-							data.house_type + "<br><b>Square Feet:</b> " + data.square_feet + "<br><b>Zip:</b> " + 
-							data.zip_code + "<br><b>City: </b>" + data.city + 
-							"<br><b>Actual Price:</b> " + data.actual_price + "<br><b>Predicted Price:</b> " + data.predicted_price)
-						return null
-					}
-				});
+				// Populate map with bubbles (different bubbles if clustering is on or off)
+       			var clustering = $('#clusteringCheckbox').is(":checked")
+       			if(clustering) { 
+					map.bubbles(houseBubbles.concat(clusters), {
+						popupTemplate: function(geo, data) {
+							// If the bubble is a cluster, pop info is different
+							if(data.fillKey == 'cluster') {
+								$("#mapData").html("<b>Cluster Index: </b>" + data.cluster +
+									"<br><b>Lat, long:</b> " + latitude + ", " + longitude)
+								return null							
+							} else { 
+								$("#mapData").html("<b>Lat, long:</b> " + 
+								latitude + ", " + longitude + "<br><b>Beds:</b> " +
+								data.beds + "<br><b>Baths:</b> " + data.baths + "<br><b>House Type:</b> " + 
+								data.house_type + "<br><b>Square Feet:</b> " + data.square_feet + "<br><b>Zip:</b> " + 
+								data.zip_code + "<br><b>City: </b>" + data.city + 
+								"<br><b>Actual Price:</b> " + data.actual_price + "<br><b>Predicted Price:</b> " + data.predicted_price)
+								return null
+							}
+						}
+					});
+       			} else {
+					map.bubbles(houseBubbles, {
+						popupTemplate: function(geo, data) {
+							$("#mapData").html("<b>Lat, long:</b> " + 
+								latitude + ", " + longitude + "<br><b>Beds:</b> " +
+								data.beds + "<br><b>Baths:</b> " + data.baths + "<br><b>House Type:</b> " + 
+								data.house_type + "<br><b>Square Feet:</b> " + data.square_feet + "<br><b>Zip:</b> " + 
+								data.zip_code + "<br><b>City: </b>" + data.city + 
+								"<br><b>Actual Price:</b> " + data.actual_price + "<br><b>Predicted Price:</b> " + data.predicted_price)
+							return null
+						}
+					});
+				}
 
 				// Add bubble click and hover functionality
 				$(".datamaps-bubble").click(function() {
@@ -734,16 +790,15 @@
 			</div>
 
 			<div class="demo-content demo-content-article">
-				<p><b>Database Information</b></p>
-				<p>In terms of database setup, future iterations should use a SQL database rather than the current sqlite for operational reasons</b>
 				<p><b>Dependencies (and related issues)</b></p>
 				<p>Here is a brief list of packages or resources used, with reflection on their utility.</b>
 				<p><a href="http://designmodo.github.io/Flat-UI/">FlatUI - Free User Interface Kit</a>: Relatively simple to use, and provides for a clean, simple, modern design.</p>
+				<p><a href="http://d3js.org">D3.js - Data-Driven Documents</a>: Great resource to create histograms and other charts.
 				<p><a href="http://www.city-data.com/city/Rio-Linda-California.html">CityData - Information about different cities</a>: Semi-structured city data.</p>
 				<p><a href="http://datamaps.github.io/">DataMaps - Visual city data</a>: Extremely easy to use, perhaps not flexible enough for more advanced usage, but could possibly modify the source.</p>
 				<p><a href="http://scikit-learn.org/">Sci-Kit - Machine learning package for python</a>: Would probably recommend any future projects insource machine learning algorithms (see below).</p>
-				<p><a href="https://devcenter.heroku.com/articles/getting-started-with-django">Heroku - Hosting for (Django) webapps</a>: Would not recommend for large-scale production environment.</p>
-				<p><a href="http://aws.amazon.com/s3/">Amazon S3 with Cloudfront - Static file serving</a>: Simple to use and to configure CORS</p>
+				<p><a href="https://devcenter.heroku.com/articles/getting-started-with-django">Heroku - Hosting for (Django) webapps</a>: Convenient, not sure about its use at a larger scale.</p>
+				<p><a href="http://aws.amazon.com/s3/">Amazon S3 with Cloudfront - Static file serving</a>: Simple to use and to configure CORS.</p>
 
 				<p><b>Machine Learning Backend Setup</b></p>
 				<p>Using existing machine learning resources is largely an exercise in frustration, particularly when combined with Heroku.
@@ -752,13 +807,13 @@
 					deploy scikit-learn, along with the usage of particular versions of numpy, scipy, and scikit-learn, and a modification
 					to the configuration setup for Heroku (changing the stack, etc.).<p>
 				<p>Even when Heroku has been properly configured to run scikit-learn, or when running the app locally, 
-					scikit learn does not guarantee perforamnce or stability.  It might be worth considering building from scratch, 
+					scikit learn does not guarantee performance or stability.  It might be worth considering building from scratch, 
 					or diving deeper into the package to ensure stability.
 					<p>
 				<p><b>General Technical Architecture (and caching)</b></p>
-				<p>The ideal setup would be to have a well-documented schema that is extremely flexible, on top of which sit a web-scraping application that pulls data from a number of sources and inputs it into models, as well as a machine learning application which runs all permutations and combinations of possible machine learning algorithms on top of the data on a regular interval. 
+				<p>The ideal setup would be to have a well-documented schema that is extremely flexible, on top of which sit a web-scraping application that pulls data from a number of sources and inputs it into models, and a machine learning application which runs all permutations and combinations of possible machine learning algorithms on top of the data on a regular interval. 
 					The machine learning application should cache model parameters, so future requests do not need to tediously rerun model fitting algorithms, which could become a resource hog if they are run everytime a client requests a page or a prediction.
-					My current setup does not cache anything, and will run the full stack (pulling from the database, transforming the data to be put into the models, and fitting hte model) every time a machine learning related request is made. 
+					My current setup does not cache models, and will run the full stack (pulling from the database, transforming the data to be put into the models, and fitting the model) every time a machine learning related request is made. 
 				</p>
 				<p><b>Model Improvements</b></p>
 				<p>There are a lot of improvements to be made in my data.  First of all, I do not split training and testing data.
@@ -766,11 +821,11 @@
 				splitting my data into k groups, where I run k-1 models that each use the concatenated data from k-1 groups to train and test on
 				the remaining group, then compare the model parameters.  If I see large variances of coefficient values of models in this 
 				cross validating method, it's likely the case that I'm overfitting and the model I'm using is not robust.  Since I have 3 possible
-				top-level model types with 3 binary options to include, I have 3*2^3=24 models, which could be see as p-value fishing.
+				top-level model types with 2 binary options to include, I have 12 total models, which could be see as p-value fishing.
 				</p>
 				<p>
 				To find the best model between large groups of models, it would be a good idea to choose models that are more robust, even if on average
-				they might not be as accurate.  My current architecture doesn't support the programatic determination of model quality.
+				they might not be as accurate.  My current architecture doesn't support the programatic determination or visualization of model quality.
 				</p>
 				<p>Lastly, I would be interested in more graphical displays of model performance.  For example, for each attribute I'd be interested in a histogram or scatterplot of the average price difference (y-axis) by the attribute value (x-axis).  This can help us understand underlying model properties, such as the distribution of attributes relative to price given the model, homoscedasticity, and the functions that relate properties to price (linear, log, etc.).</p>
 			</div>

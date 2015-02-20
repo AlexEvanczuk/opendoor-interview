@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, HttpRequest, QueryDict
 
-from predict_house_prices.models import House, City
+from predict_house_prices.models import House, City, Cluster
 import requests, json, math, numpy, re
 from django.core import serializers
 from sklearn.linear_model import LinearRegression
@@ -11,6 +11,7 @@ from sklearn.feature_extraction import DictVectorizer
 from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
 import sklearn
 import locale
+from sklearn.cluster import KMeans
 
 # Create your views here.
 def main_page(request):
@@ -57,6 +58,19 @@ def return_house_bubbles(request):
 		bubbles += [house_dict]
 	return HttpResponse(json.dumps(bubbles))
 
+def return_clusters(request):
+	clusters = Cluster.objects.all()
+	# Iterate over returned houses and provide the format needed
+	# for the bubbles in datamaps
+	bubbles = []
+	for c in clusters:
+		cluster_dict = {'cluster': c.index,
+			'fillKey': 'cluster',
+			'radius': 10,
+			'latitude': c.latitude,
+			'longitude': c.longitude}
+		bubbles += [cluster_dict]
+	return HttpResponse(json.dumps(bubbles))
 '''
 Pass in JSON object of the form in a POST
 request. House covariates is optional, used for prediction.
@@ -105,9 +119,12 @@ def linear_model(request):
 		# string of 'true' or 'false' rather than a boolean.  This should be 
 		# fixed to be made more intuitive.
 		if modelSettings['interactions'] == 'true':
-			print(True)
 			houseCovariates['beds*city'] = str(house.beds) + "*" + house.city
 			houseCovariates['beds*type'] = str(house.beds) + "*" + house.house_type
+		
+		# Similarly for clusters
+		if modelSettings['clustering'] == 'true':
+			houseCovariates['cluster'] = house.cluster
 		
 		print(houseCovariates)
 		X += [houseCovariates]
@@ -178,6 +195,9 @@ def linear_model(request):
 			houseCovariates['beds*city'] = str(house.beds) + "*" + house.city
 			houseCovariates['beds*type'] = str(house.beds) + "*" + house.house_type
 
+		if modelSettings['clustering'] == 'true':
+			houseCovariates['cluster'] = house.cluster
+		
 		covariates = vect.transform(houseCovariates)
 
 		predicted_price = float(clf.predict(covariates[0]))
@@ -225,7 +245,10 @@ def linear_model(request):
 		if modelSettings['interactions'] == 'true':
 			houseCovariates['beds*city'] = str(house.beds) + "*" + house.city
 			houseCovariates['beds*type'] = str(house.beds) + "*" + house.house_type
-
+		
+		if modelSettings['clustering'] == 'true':
+			houseCovariates['cluster'] = house.cluster
+		
 		housePrediction = clf.predict(vect.transform(houseCovariates))[0]
 
 	print("Metrics ------------") 
@@ -308,3 +331,32 @@ def load_cities(request):
 
 	return HttpResponse(json.dumps({'totalFeatures': totalFeatures,
 		'foundFeatures': foundFeatures, 'Needs Manual': manualCities, 'Completed Cities': completedCities}))
+
+# Cluster our data into 5 regions, create cluster objects, and populate house cluster field
+def cluster_data(request):
+	houses = House.objects.all()
+	kmeans = KMeans(init='k-means++', n_clusters=5, n_init=10)
+	lat_long_array = []
+
+	# Populate [lat, long] array for use in k-means clustering algorithm
+	for house in houses:
+		lat_long_array += [[house.latitude, house.longitude]]
+	
+	# Cluster data
+	clusters = kmeans.fit(lat_long_array)
+	print(clusters.cluster_centers_)
+	print(clusters.labels_)
+
+	clusterArr = clusters.cluster_centers_.tolist()
+	for i in range(0,len(clusterArr)):
+		Cluster.objects.create(index = i, latitude = clusterArr[i][0], longitude = clusterArr[i][1])
+
+	# For each house, find the cluster it belongs to
+	for house in houses:
+		clusterIndex = kmeans.predict([house.latitude, house.longitude])
+		house.cluster = clusterIndex
+		house.save()
+
+	return HttpResponse(json.dumps({'cluster centers': clusters.cluster_centers_.tolist(), 'cluster labels': clusters.labels_.tolist()}))
+
+
