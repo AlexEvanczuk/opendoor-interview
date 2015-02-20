@@ -13,7 +13,6 @@ bcdoc==0.12.2
 bcrypt==1.1.0
 bdist-mpkg==0.4.4
 beautifulsoup4==4.3.2
-bonjour-py==0.3
 botocore==0.86.0
 cffi==0.8.6
 colorama==0.2.5
