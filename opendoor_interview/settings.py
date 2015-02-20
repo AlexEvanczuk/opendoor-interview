@@ -120,3 +120,5 @@ STATICFILES_DIRS = (
 #numpy==1.8.1
 #scikit-learn==0.14.1
 #scipy==0.14.0 
+
+# Also psycopg2==2.5.2
